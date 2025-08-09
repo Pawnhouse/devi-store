@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import ProductCard from '../components/ProductCard';
-import styles from '../styles/globals.css';
 
 export default function Home() {
     const [products, setProducts] = useState([]);
