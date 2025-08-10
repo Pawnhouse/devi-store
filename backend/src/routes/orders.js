@@ -1,5 +1,4 @@
 const express = require('express');
-const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 const router = express.Router();
@@ -8,36 +7,32 @@ router.post('/', async (req, res) => {
     const { name, email, address, items, total } = req.body;
 
     try {
-        // Save order to database
         const pool = require('../db');
         const result = await pool.query(
             'INSERT INTO orders (name, email, address, items, total) VALUES ($1, $2, $3, $4, $5) RETURNING *',
             [name, email, address, JSON.stringify(items), total]
         );
 
-        // Send email notification to manager
-        const transporter = nodemailer.createTransport({
-                host: process.env.EMAIL_HOST,
-                port: 465,
-                secure: true,
-                auth: {
-                    user: process.env.EMAIL_USER,
-                    pass: process.env.EMAIL_PASS,
-                },
+        const telegramBotToken = process.env.TELEGRAM_BOT_TOKEN;
+        const telegramChatId = process.env.TELEGRAM_CHAT_ID;
+        const messageText = `New Order Received\nFrom: ${name}\nEmail: ${email}\nAddress: ${address}\nItems: ${JSON.stringify(items, null, 2)}\nTotal: $${total}`;
+
+        const telegramResponse = await fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                chat_id: telegramChatId,
+                text: messageText,
+                parse_mode: 'Markdown',
+            }),
         });
 
-        const mailOptions = {
-            from: process.env.EMAIL_USER,
-            to: process.env.MANAGER_EMAIL,
-            subject: 'New Order Received',
-            text: `Order from ${name}\nEmail: ${email}\nAddress: ${address}\nItems: ${JSON.stringify(
-                items,
-                null,
-                2
-            )}\nTotal: $${total}`,
-        };
+        if (!telegramResponse.ok) {
+            console.error('Failed to send Telegram notification');
+        }
 
-        await transporter.sendMail(mailOptions);
         res.json(result.rows[0]);
     } catch (err) {
         console.error(err);
