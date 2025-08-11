@@ -6,9 +6,16 @@ export default function ProductCard({ product }) {
         <div className="product-card">
             <Link href={`/product/${product.id}`}>
                 <div>
-                    <Image src={product.images[0]} alt={product.name} width={200} height={200} />
-                    <h3>{product.name}</h3>
-                    <p>${product.price}</p>
+                    <div className="image-wrapper">
+                        <Image
+                            src={product.images[0]}
+                            alt={product.name}
+                            fill
+                            style={{objectFit: 'contain'}}
+                        />
+                    </div>
+                    <h3 className="product-name">{product.name}</h3>
+                    <p className="product-price">${product.price}</p>
                 </div>
             </Link>
         </div>
