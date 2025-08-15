@@ -38,8 +38,8 @@ export default function Order() {
     };
 
     return (
-        <div className="container">
-            <h1>Place Your Order</h1>
+        <>
+            <h2>Place Your Order</h2>
             <form onSubmit={handleSubmit}>
                 <label>
                     Name:
@@ -60,6 +60,6 @@ export default function Order() {
                 <p>Total: ${cart.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2)}</p>
                 <button type="submit">Submit Order</button>
             </form>
-        </div>
+        </>
     );
 }

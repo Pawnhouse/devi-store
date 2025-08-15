@@ -17,9 +17,7 @@ body {
 }
 
 .product-card {
-    border: 1px solid #ddd;
     padding: 10px;
-    text-align: center;
 }
 
 .image-wrapper {
@@ -27,8 +25,6 @@ body {
     width: 100%;
     padding-bottom: 100%;
 }
-
-
 
 .product-details {
     display: flex;
@@ -70,8 +66,19 @@ button {
     cursor: pointer;
 }
 
+.icon-container {
+    position: relative;
+    width: 32px;
+    height: 32px;
+}
+
 button:hover {
     background-color: #005bb5;
+}
+
+.black-link {
+    color: black;
+    text-decoration: none;
 }
 
 @media (max-width: 768px) {
@@ -96,6 +103,11 @@ button:hover {
 }
 
 @media (max-width: 400px) {
+    h1 {
+        font-size: 24px;
+        margin: 5px 0;
+    }
+
     .product-grid {
         grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
         gap: 10px;
@@ -107,5 +119,10 @@ button:hover {
 
     .product-price {
         font-size: 12px;
+    }
+
+    .icon-container {
+        width: 24px;
+        height: 24px;
     }
 }

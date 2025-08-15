@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 import ProductCard from '../components/ProductCard';
 
 export default function Home() {
@@ -12,13 +12,10 @@ export default function Home() {
     }, []);
 
     return (
-        <div className="container">
-            <h1>Product Catalog</h1>
-            <div className="product-grid">
-                {products.map((product) => (
-                    <ProductCard key={product.id} product={product} />
-                ))}
-            </div>
+        <div className="product-grid">
+            {products.map((product) => (
+                <ProductCard key={product.id} product={product} />
+            ))}
         </div>
     );
 }

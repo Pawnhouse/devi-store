@@ -19,18 +19,15 @@ export default function ProductPage() {
     if (!product) return <div>Loading...</div>;
 
     return (
-        <div className="container">
-            <h1>{product.name}</h1>
-            <div className="product-details">
-                <div className="product-images">
-                    {product.images.map((img, index) => (
-                        <Image key={index} src={img} alt={product.name} width={300} height={300} />
-                    ))}
-                </div>
-                <p>{product.description}</p>
-                <p>Price: ${product.price}</p>
-                <button onClick={() => addToCart(product)}>Add to Cart</button>
+        <div className="product-details">
+            <div className="product-images">
+                {product.images.map((img, index) => (
+                    <Image key={index} src={img} alt={product.name} width={300} height={300} />
+                ))}
             </div>
+            <h2>{product.name}</h2>
+            <p>Price: ${product.price}</p>
+            <button onClick={() => addToCart(product)}>Add to Cart</button>
         </div>
     );
 
