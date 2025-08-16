@@ -1,6 +1,8 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { Carousel } from "react-responsive-carousel";
 
 export default function ProductPage() {
     const router = useRouter();
@@ -20,14 +22,27 @@ export default function ProductPage() {
 
     return (
         <div className="product-details">
-            <div className="product-images">
+            <Carousel
+                showThumbs={false}
+                showStatus={false}
+                showIndicators={false}
+            >
                 {product.images.map((img, index) => (
-                    <Image key={index} src={img} alt={product.name} width={300} height={300} />
+                    <Image key={index} src={img} alt={product.name} width={300} height={300}/>
                 ))}
-            </div>
+            </Carousel>
             <h2>{product.name}</h2>
-            <p>Price: ${product.price}</p>
-            <button onClick={() => addToCart(product)}>Add to Cart</button>
+            <button
+                onClick={() => addToCart(product)}
+                className="icon-container"
+                style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
+            >
+                <Image
+                    alt="Add to Cart"
+                    src="/icons/plus-large-svgrepo-com.svg"
+                    fill
+                />
+            </button>
         </div>
     );
 

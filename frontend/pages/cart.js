@@ -41,7 +41,7 @@ export default function Cart() {
                             removeItem={removeItem}
                         />
                     ))}
-                    <p>Total: ${total.toFixed(2)}</p>
+                    <p>Subtotal: {total.toFixed(2)} RUB</p>
                     <Link href="/order">
                         <button>Proceed to Order</button>
                     </Link>

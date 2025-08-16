@@ -18,7 +18,6 @@ export default function Header() {
                             fill
                         />
                     </div>
-
                 </Link>
             </nav>
         </header>

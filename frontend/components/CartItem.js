@@ -2,7 +2,7 @@ export default function CartItem({ item, updateQuantity, removeItem }) {
     return (
         <div className="cart-item">
             <p>{item.name}</p>
-            <p>${item.price} x </p>
+            <p>{item.price} RUB x </p>
             <input
                 type="number"
                 min="1"

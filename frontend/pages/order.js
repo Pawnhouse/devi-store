@@ -55,9 +55,9 @@ export default function Order() {
                 </label>
                 <h3>Order Summary</h3>
                 {cart.map((item) => (
-                    <p key={item.id}>{item.name} - {item.quantity} x ${item.price}</p>
+                    <p key={item.id}>{item.name} - {item.quantity} x {item.price} RUB</p>
                 ))}
-                <p>Total: ${cart.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2)}</p>
+                <p>Subtotal: {cart.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2)} RUB</p>
                 <button type="submit">Submit Order</button>
             </form>
         </>
