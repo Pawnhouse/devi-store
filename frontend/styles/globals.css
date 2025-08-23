@@ -65,6 +65,14 @@ button {
     position: relative;
     width: 32px;
     height: 32px;
+    background: none;
+    padding: 0;
+    border: none;
+    cursor: pointer;
+}
+
+.icon-container:hover {
+    background: none;
 }
 
 button:hover {
@@ -74,6 +82,32 @@ button:hover {
 .black-link {
     color: black;
     text-decoration: none;
+}
+
+.carousel .slide {
+    padding: 0 32px;
+}
+
+.arrow {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 20;
+}
+
+.left-arrow {
+    left: 0;
+}
+
+.right-arrow {
+    right: 0;
+}
+
+.hidden.arrow {
+    display: none;
 }
 
 @media (max-width: 768px) {
@@ -113,5 +147,9 @@ button:hover {
     .icon-container {
         width: 24px;
         height: 24px;
+    }
+
+    .carousel .slide {
+        padding: 0 24px;
     }
 }

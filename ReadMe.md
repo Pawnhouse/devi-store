@@ -1,4 +1,4 @@
-## Daivy Store
+## Devi Store
 
 Ecommerce website with catalog, item, and order processing pages. Manager notifications via Telegram.
 

@@ -6,7 +6,7 @@ export default function Header() {
         <header style={{padding: '1rem 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
             <h1>
                 <Link href="/" className="black-link">
-                    <span>Daivy Store</span>
+                    <span>Devi Store</span>
                 </Link>
             </h1>
             <nav>
