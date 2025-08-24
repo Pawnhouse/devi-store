@@ -15,7 +15,7 @@ router.post('/', async (req, res) => {
 
         const telegramBotToken = process.env.TELEGRAM_BOT_TOKEN;
         const telegramChatId = process.env.TELEGRAM_CHAT_ID;
-        const messageText = `New Order Received\nFrom: ${name}\nEmail: ${email}\nAddress: ${address}\nItems: ${JSON.stringify(items, null, 2)}\nTotal: $${total}`;
+        const messageText = `New Order Received\nFrom: ${name}\nEmail: ${email}\nAddress: ${address}\nItems: ${JSON.stringify(items, null, 2)}\nTotal: ${total} RUB`;
 
         const telegramResponse = await fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
             method: 'POST',

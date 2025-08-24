@@ -93,7 +93,7 @@ export default function ProductPage() {
 
     function addToCart(product) {
         const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-        cart.push({ id: product.id, name: product.name, price: product.price, quantity: 1 });
+        cart.push({ id: product.id, quantity: 1 });
         localStorage.setItem('cart', JSON.stringify(cart));
         toast.success('Added to cart!');
     }

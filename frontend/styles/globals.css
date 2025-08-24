@@ -35,30 +35,39 @@ body {
 
 .cart-item {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     padding: 10px;
     border-bottom: 1px solid #ddd;
+    gap: 15px;
 }
 
-form {
+.cart-item .image-wrapper {
+    width: 60px;
+    padding-bottom: 60px;
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.flex-column {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    max-width: 500px;
 }
 
-label {
-    display: flex;
-    flex-direction: column;
-}
-
-button {
+.submit-button {
     padding: 10px;
-    background-color: #0070f3;
+    background-color: #000000;
     color: white;
     border: none;
     cursor: pointer;
+}
+
+.submit-button:hover {
+    background-color: #333333;
 }
 
 .icon-container {
@@ -71,12 +80,9 @@ button {
     cursor: pointer;
 }
 
-.icon-container:hover {
-    background: none;
-}
-
-button:hover {
-    background-color: #005bb5;
+.small-icon-container {
+    width: 24px;
+    height: 24px;
 }
 
 .black-link {
@@ -110,6 +116,27 @@ button:hover {
     display: none;
 }
 
+.cart-info-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    flex-grow: 1;
+}
+
+.cart-info-container p {
+    margin: 0;
+}
+
+fieldset {
+    border: none;
+    padding: 5px 0;
+    margin: 25px 0 15px;
+}
+
+legend {
+    padding: 0;
+}
+
 @media (max-width: 768px) {
     .product-grid {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -118,6 +145,11 @@ button:hover {
 
     .container {
         padding: 10px;
+    }
+
+    .cart-item .image-wrapper {
+        width: 50px;
+        padding-bottom: 50px;
     }
 }
 
@@ -147,6 +179,11 @@ button:hover {
     .icon-container {
         width: 24px;
         height: 24px;
+    }
+
+    .cart-item .image-wrapper {
+        width: 40px;
+        padding-bottom: 40px;
     }
 
     .carousel .slide {
