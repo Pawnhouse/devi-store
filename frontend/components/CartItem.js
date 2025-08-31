@@ -13,6 +13,8 @@ export default function CartItem({ item, updateQuantity, removeItem }) {
             </div>
             <div className="cart-info-container">
                 <p>{item.name}</p>
+                <p className="small-grey-text">Size: {item.size.abbrev}</p>
+                <p className="small-grey-text">{item.code}</p>
                 <div className="quantity-controls">
                     <button
                         className="icon-container small-icon-container"

@@ -4,18 +4,18 @@ require('dotenv').config();
 const router = express.Router();
 
 router.post('/', async (req, res) => {
-    const { name, email, address, items, total } = req.body;
+    const { name, email, address, phone, items, total, deliveryTypeId } = req.body;
 
     try {
         const pool = require('../db');
         const result = await pool.query(
-            'INSERT INTO orders (name, email, address, items, total) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-            [name, email, address, JSON.stringify(items), total]
+            'INSERT INTO orders (name, email, address, phone, items, total, delivery_type_id) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+            [name, email, address, phone, JSON.stringify(items), total, deliveryTypeId]
         );
-
+        const deliveryType = await pool.query('SELECT name FROM delivery_types WHERE id = $1', [deliveryTypeId]);
         const telegramBotToken = process.env.TELEGRAM_BOT_TOKEN;
         const telegramChatId = process.env.TELEGRAM_CHAT_ID;
-        const messageText = `New Order Received\nFrom: ${name}\nEmail: ${email}\nAddress: ${address}\nItems: ${JSON.stringify(items, null, 2)}\nTotal: ${total} RUB`;
+        const messageText = `New Order Received\nFrom: ${name}\nEmail: ${email}\nAddress: ${address}\nDelivery type: ${deliveryType.rows[0]?.name || ''}\nItems: ${JSON.stringify(items, null, 2)}\nTotal: ${total} RUB`;
 
         const telegramResponse = await fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
             method: 'POST',

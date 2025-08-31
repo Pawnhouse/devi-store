@@ -52,6 +52,11 @@ body {
     gap: 10px;
 }
 
+.small-grey-text {
+    font-size: 14px;
+    color: #2F4F4F;
+}
+
 .flex-column {
     display: flex;
     flex-direction: column;

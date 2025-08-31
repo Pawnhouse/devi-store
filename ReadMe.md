@@ -6,7 +6,7 @@ Ecommerce website with catalog, item, and order processing pages. Manager notifi
 
 1. **Database**:
     - Install PostgreSQL and create a database.
-    - Run the [schema.sql](sql/schema.sql) script to create tables and insert sample data.
+    - Run the [schema_with_data.sql](sql/schema_with_data.sql) script to create tables and insert sample data.
 
 2. **Telegram**:
     - Create a bot on Telegram.

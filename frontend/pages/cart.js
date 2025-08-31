@@ -7,20 +7,37 @@ import { FormControlLabel, Radio, RadioGroup, TextField } from "@mui/material";
 
 export default function Cart() {
     const [cart, setCart] = useState([]);
+    const [deliveryTypes, setDeliveryTypes] = useState([]);
     const [formData, setFormData] = useState({
         name: '',
         email: '',
         phone: '',
         city: 'Москва',
-        deliveryMethod: 'pickup'
+        deliveryTypeId: 1
     });
     const router = useRouter();
 
     function getCartWithDetails(storedCart, products) {
-        return storedCart.map(item => {
-            const product = products.find(p => p.id === item.id);
-            return { ...product, quantity: item.quantity };
-        });
+        return storedCart
+            .filter(item => products.some(p => p.id === item.id))
+            .map(item => {
+                const product = products.find(p => p.id === item.id);
+                return {
+                    ...product,
+                    quantity: item.quantity,
+                    size: product.sizes.find(size => size.id === item.sizeId)
+                };
+            })
+            .filter(item => item.size);
+    }
+
+    function updateCart(cart) {
+        setCart(cart);
+        localStorage.setItem('cart', JSON.stringify(cart.map((item) => ({
+            id: item.id,
+            quantity: item.quantity,
+            sizeId: item.size.id
+        }))));
     }
 
     useEffect(() => {
@@ -33,20 +50,23 @@ export default function Cart() {
                 setCart(cartWithDetails);
             })
             .catch(err => console.error('Error fetching products for cart:', err));
+
+        fetch(`http://localhost:5000/api/delivery-types`)
+            .then(res => res.json())
+            .then(setDeliveryTypes)
+            .catch(err => console.error('Error fetching products for cart:', err));
     }, []);
 
     const updateQuantity = (id, quantity) => {
         const updatedCart = cart.map((item) =>
             item.id === id ? { ...item, quantity: Math.max(1, Number(quantity)) } : item
         );
-        setCart(updatedCart);
-        localStorage.setItem('cart', JSON.stringify(updatedCart));
+        updateCart(updatedCart);
     };
 
     const removeItem = (id) => {
         const updatedCart = cart.filter((item) => item.id !== id);
-        setCart(updatedCart);
-        localStorage.setItem('cart', JSON.stringify(updatedCart));
+        updateCart(updatedCart);
     };
 
     const handleInputChange = (e) => {
@@ -59,7 +79,8 @@ export default function Cart() {
             ...formData,
             items: cart.map(item => ({
                 name: item.name,
-                quantity: item.quantity
+                quantity: item.quantity,
+                size: item.size.abbrev
             })),
             total: cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
         };
@@ -93,7 +114,7 @@ export default function Cart() {
                 <>
                     {cart.map((item) => (
                         <CartItem
-                            key={item.id}
+                            key={item.id + '-' + item.size.id}
                             item={item}
                             updateQuantity={updateQuantity}
                             removeItem={removeItem}
@@ -140,20 +161,20 @@ export default function Cart() {
                                 required
                             />
                             <RadioGroup
-                                aria-labelledby="demo-radio-buttons-group-label"
-                                defaultValue="cdek"
-                                name="radio-buttons-group"
+                                name="deliveryTypeId"
+                                value={formData.deliveryTypeId}
+                                onChange={(e) => setFormData({ ...formData, deliveryTypeId: e.target.value })}
                             >
-                                <FormControlLabel
-                                    value="pick-up-point"
-                                    control={<Radio/>}
-                                    label="До пункта выдачи СДЭК"
-                                />
-                                <FormControlLabel
-                                    value="delivery"
-                                    control={<Radio/>}
-                                    label="Доставка в пределах МКАД"
-                                />
+                                {
+                                    deliveryTypes.map((item) => (
+                                        <FormControlLabel
+                                            key={item.id}
+                                            value={item.id}
+                                            control={<Radio/>}
+                                            label={item.name}
+                                        />
+                                    ))
+                                }
                             </RadioGroup>
                         </fieldset>
                         <button className="submit-button">Submit Order</button>
