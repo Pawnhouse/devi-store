@@ -5,7 +5,7 @@ export default function Home() {
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/products')
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`)
             .then((res) => res.json())
             .then((data) => setProducts(data))
             .catch((err) => console.error('Error fetching products:', err));
