@@ -19,7 +19,7 @@ export default function Order() {
         e.preventDefault();
         const order = { ...formData, items: cart, total: cart.reduce((sum, item) => sum + item.price * item.quantity, 0) };
         try {
-            const res = await fetch('http://localhost:5000/api/orders', {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/orders`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(order),

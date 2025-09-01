@@ -21,6 +21,7 @@ Ecommerce website with catalog, item, and order processing pages. Manager notifi
 
 4. **Frontend Setup**:
     - Navigate to the [frontend](frontend) directory.
+    - Add `.env` file here using [.env.template](frontend/.env.template).
     - Run `npm install` to install dependencies.
     - Start the frontend with `npm run dev` to run the Next.js development server.
 

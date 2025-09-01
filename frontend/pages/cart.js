@@ -43,7 +43,7 @@ export default function Cart() {
     useEffect(() => {
         const storedCart = JSON.parse(localStorage.getItem('cart') || '[]');
 
-        fetch(`http://localhost:5000/api/products`)
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`)
             .then(res => res.json())
             .then(products => {
                 const cartWithDetails = getCartWithDetails(storedCart, products);
@@ -51,7 +51,7 @@ export default function Cart() {
             })
             .catch(err => console.error('Error fetching products for cart:', err));
 
-        fetch(`http://localhost:5000/api/delivery-types`)
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/delivery-types`)
             .then(res => res.json())
             .then(setDeliveryTypes)
             .catch(err => console.error('Error fetching products for cart:', err));
@@ -85,7 +85,7 @@ export default function Cart() {
             total: cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
         };
         try {
-            const res = await fetch('http://localhost:5000/api/orders', {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/orders`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(order),
