@@ -1,14 +1,11 @@
 import Link from 'next/link';
 import Image from 'next/image'
+import NavigationMenu from "./NavigationMenu";
 
 export default function Header() {
     return (
         <header style={{padding: '1rem 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-            <h1>
-                <Link href="/" className="black-link">
-                    <span>Devi Store</span>
-                </Link>
-            </h1>
+            <NavigationMenu />
             <nav>
                 <Link href="/cart">
                     <div className="icon-container">
