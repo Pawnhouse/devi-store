@@ -1,21 +1,11 @@
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import { toast, ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import CartItem from "../components/CartItem";
-import { FormControlLabel, Radio, RadioGroup, TextField } from "@mui/material";
+import OrderForm from "../components/OrderForm";
 
 export default function Cart() {
     const [cart, setCart] = useState([]);
-    const [deliveryTypes, setDeliveryTypes] = useState([]);
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        phone: '',
-        city: 'Москва',
-        deliveryTypeId: 1
-    });
-    const router = useRouter();
 
     function getCartWithDetails(storedCart, products) {
         return storedCart
@@ -50,11 +40,6 @@ export default function Cart() {
                 setCart(cartWithDetails);
             })
             .catch(err => console.error('Error fetching products for cart:', err));
-
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/delivery-types`)
-            .then(res => res.json())
-            .then(setDeliveryTypes)
-            .catch(err => console.error('Error fetching products for cart:', err));
     }, []);
 
     const updateQuantity = (id, quantity) => {
@@ -67,40 +52,6 @@ export default function Cart() {
     const removeItem = (id) => {
         const updatedCart = cart.filter((item) => item.id !== id);
         updateCart(updatedCart);
-    };
-
-    const handleInputChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const order = {
-            ...formData,
-            items: cart.map(item => ({
-                name: item.name,
-                quantity: item.quantity,
-                size: item.size.abbrev
-            })),
-            total: cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
-        };
-        try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/orders`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(order),
-            });
-            if (res.ok) {
-                localStorage.removeItem('cart');
-                toast.success('Order placed successfully!');
-                router.push('/');
-            } else {
-                toast.error('Error placing order.');
-            }
-        } catch (err) {
-            console.error('Error submitting order:', err);
-            toast.error('Error placing order.');
-        }
     };
 
     const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -121,64 +72,7 @@ export default function Cart() {
                         />
                     ))}
                     <p style={{ textAlign: 'right' }}>Subtotal: {total.toFixed(2)} RUB</p>
-                    <form
-                        className="flex-column"
-                        onSubmit={handleSubmit}
-                    >
-                        <TextField
-                            label="Фамилия Имя"
-                            variant="standard"
-                            name="name"
-                            value={formData.name}
-                            onChange={handleInputChange}
-                            required
-                        />
-                        <TextField
-                            label="Email"
-                            variant="standard"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleInputChange}
-                            required
-                        />
-
-                        <TextField
-                            label="Телефон"
-                            variant="standard"
-                            name="phone"
-                            value={formData.phone}
-                            onChange={handleInputChange}
-                            required
-                        />
-                        <fieldset className="flex-column">
-                            <legend>Delivery</legend>
-                            <TextField
-                                label="City"
-                                variant="standard"
-                                name="address"
-                                value={formData.address}
-                                onChange={handleInputChange}
-                                required
-                            />
-                            <RadioGroup
-                                name="deliveryTypeId"
-                                value={formData.deliveryTypeId}
-                                onChange={(e) => setFormData({ ...formData, deliveryTypeId: e.target.value })}
-                            >
-                                {
-                                    deliveryTypes.map((item) => (
-                                        <FormControlLabel
-                                            key={item.id}
-                                            value={item.id}
-                                            control={<Radio/>}
-                                            label={item.name}
-                                        />
-                                    ))
-                                }
-                            </RadioGroup>
-                        </fieldset>
-                        <button className="submit-button">Submit Order</button>
-                    </form>
+                    <OrderForm cart={cart}/>
                 </>
             )}
             <ToastContainer position="bottom-right" autoClose={3000} hideProgressBar/>
