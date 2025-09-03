@@ -52,6 +52,7 @@ export default function ProductPage() {
                 showThumbs={false}
                 showStatus={false}
                 showIndicators={false}
+                infiniteLoop={true}
                 renderArrowPrev={(clickHandler, hasPrev) => {
                     return (
                         <div
