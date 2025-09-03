@@ -14,7 +14,7 @@ export default function ProductCard({ product }) {
                             style={{objectFit: 'contain'}}
                         />
                     </div>
-                    <h3 className="product-name">{product.name}</h3>
+                    <h3 className="product-name">{product.code}</h3>
                     <p className="product-price">{product.price} RUB</p>
                 </div>
             </Link>
