@@ -94,7 +94,7 @@ export default function ProductPage() {
                         src={img}
                         alt={product.name}
                         width={300}
-                        height={300}
+                        height={400}
                         style={{ objectFit: 'contain' }}
                     />
                 ))}

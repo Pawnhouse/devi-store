@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 export default function ProductCard({ product }) {
     return (
-        <div className="product-card">
+
             <Link href={`/product/${product.id}`} className="black-link">
                 <div>
                     <div className="image-wrapper">
@@ -15,9 +15,8 @@ export default function ProductCard({ product }) {
                         />
                     </div>
                     <h3 className="product-name">{product.code}</h3>
-                    <p className="product-price">{product.price} RUB</p>
                 </div>
             </Link>
-        </div>
+
     );
 }
