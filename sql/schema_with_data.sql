@@ -18,6 +18,7 @@ CREATE TABLE products
     name   VARCHAR(255) NOT NULL,
     description TEXT,
     price       DECIMAL(10, 2) NOT NULL,
+    display_order INT,
     images TEXT[] DEFAULT '{}'
 );
 
@@ -36,7 +37,7 @@ CREATE TABLE orders
     name             VARCHAR(255)   NOT NULL,
     email            VARCHAR(255)   NOT NULL,
     address          TEXT           NOT NULL,
-    phone            VARCHAR(20),
+    phone            VARCHAR(20)    NOT NULL,
     items            JSONB          NOT NULL,
     total            DECIMAL(10, 2) NOT NULL,
     delivery_type_id INT,

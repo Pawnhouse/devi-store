@@ -20,7 +20,8 @@ router.get('/', async (req, res) => {
             FROM products p
             LEFT JOIN product_sizes ps ON p.id = ps.product_id
             LEFT JOIN sizes s ON ps.size_id = s.id
-            GROUP BY p.id
+            GROUP BY p.id, p.display_order
+            ORDER BY p.display_order, p.id
         `);
         res.json(result.rows);
     } catch (err) {
