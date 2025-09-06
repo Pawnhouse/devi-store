@@ -103,11 +103,9 @@ export default function ProductPage() {
             <StyledToggleButtonGroup
                 value={sizeId}
                 exclusive
-                onChange={(event, value) => setSizeId(value) }
-                aria-label="text alignment"
+                onChange={(event, value) => value && setSizeId(value) }
             >
                 {product.sizes.map((size) => (
-
                     <ToggleButton value={size.id} key={size.id}>
                         {size.abbrev}
                     </ToggleButton>
