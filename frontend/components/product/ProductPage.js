@@ -26,7 +26,7 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
         },
 }));
 
-export default function ProductPage() {
+export default function ProductPage({ onImageLoad }) {
     const router = useRouter();
     const id = router.query.productId;
     const [product, setProduct] = useState(null);
@@ -43,12 +43,11 @@ export default function ProductPage() {
                 .catch((err) => console.error('Error fetching product:', err));
         }
     }, [id]);
-
     if (!product) return <div>Loading...</div>;
 
     return (
         <div className="product-details">
-            <PhotoCarousel images={product.images}/>
+            <PhotoCarousel images={product.images} onImageLoad={onImageLoad}/>
             <h2>{product.name}</h2>
             <StyledToggleButtonGroup
                 value={sizeId}

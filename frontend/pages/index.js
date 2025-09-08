@@ -1,10 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ProductCard from '../components/ProductCard';
 import ProductPage from '../components/product/ProductPage';
 import { useRouter } from "next/router";
 
 export default function Home() {
     const [products, setProducts] = useState([]);
+    const [clickedProductId, setClickedProductId] = useState(null);
+    const [isAnimationComplete, setIsAnimationComplete] = useState(true);
+    const [isImageLoaded, setIsImageLoaded] = useState(true);
+    const pageRef = useRef(null);
     const router = useRouter();
     const { productId } = router.query;
 
@@ -14,16 +18,41 @@ export default function Home() {
             .then((data) => setProducts(data))
             .catch((err) => console.error('Error fetching products:', err));
     }, []);
-    if (productId === null || productId === undefined) {
-        return (
-            <div className="product-grid">
+
+    useEffect(() => {
+        if (clickedProductId !== null && isImageLoaded && isAnimationComplete) {
+            setClickedProductId(null);
+            window.scrollTo(0, 0);
+        }
+    }, [clickedProductId, isAnimationComplete, isImageLoaded]);
+
+    const isProductPage = productId !== null && productId !== undefined;
+
+    const shouldShowProductPage = clickedProductId === null;
+    return (
+        <>
+            <div
+                className="product-grid"
+                ref={pageRef}
+                style={{ display: isProductPage && shouldShowProductPage ? 'none' : 'grid' }}
+            >
                 {products.map((product) => (
-                    <ProductCard key={product.id} product={product}/>
+                    <ProductCard
+                        key={product.id}
+                        product={product}
+                        pageRef={pageRef}
+                        clickedProductId={clickedProductId}
+                        setClickedProductId={setClickedProductId}
+                        setIsAnimationComplete={setIsAnimationComplete}
+                        setIsImageLoaded={setIsImageLoaded}
+                    />
                 ))}
             </div>
-        );
-    }
-    return (
-        <ProductPage/>
-    )
+            {isProductPage &&
+                <div style={{ display: shouldShowProductPage ? 'block' : 'none' }}>
+                    <ProductPage onImageLoad={() => setIsImageLoaded(true)}/>
+                </div>
+            }
+        </>
+    );
 }
