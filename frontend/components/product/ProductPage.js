@@ -2,10 +2,10 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import { Carousel } from 'react-responsive-carousel';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { styled, ToggleButton, toggleButtonClasses, ToggleButtonGroup, toggleButtonGroupClasses } from "@mui/material";
+import { PhotoCarousel } from "./PhotoCarousel";
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
     gap: '1.5rem',
@@ -28,7 +28,7 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
 
 export default function ProductPage() {
     const router = useRouter();
-    const { id } = router.query;
+    const id = router.query.productId;
     const [product, setProduct] = useState(null);
     const [sizeId, setSizeId] = useState(null);
 
@@ -48,62 +48,12 @@ export default function ProductPage() {
 
     return (
         <div className="product-details">
-            <Carousel
-                showThumbs={false}
-                showStatus={false}
-                showIndicators={false}
-                infiniteLoop={true}
-                renderArrowPrev={(clickHandler, hasPrev) => {
-                    return (
-                        <div
-                            className={`${
-                                hasPrev ? "absolute" : "hidden"
-                            } arrow left-arrow`}
-                        >
-                            <button className="icon-container" onClick={clickHandler}>
-                                <Image
-                                    alt="Scroll to left image"
-                                    src="/icons/arrow-left-svgrepo-com.svg"
-                                    fill
-                                />
-                            </button>
-                        </div>
-                    );
-                }}
-                renderArrowNext={(clickHandler, hasNext) => {
-                    return (
-                        <div
-                            className={`${
-                                hasNext ? "" : "hidden"
-                            } arrow right-arrow`}
-                        >
-                            <button className="icon-container" onClick={clickHandler}>
-                                <Image
-                                    alt="Scroll to right image"
-                                    src="/icons/arrow-right-svgrepo-com.svg"
-                                    fill
-                                />
-                            </button>
-                        </div>
-                    );
-                }}
-            >
-                {product.images.map((img) => (
-                    <Image
-                        key={img}
-                        src={img}
-                        alt={product.name}
-                        width={300}
-                        height={400}
-                        style={{ objectFit: 'contain' }}
-                    />
-                ))}
-            </Carousel>
+            <PhotoCarousel images={product.images}/>
             <h2>{product.name}</h2>
             <StyledToggleButtonGroup
                 value={sizeId}
                 exclusive
-                onChange={(event, value) => value && setSizeId(value) }
+                onChange={(event, value) => value && setSizeId(value)}
             >
                 {product.sizes.map((size) => (
                     <ToggleButton value={size.id} key={size.id}>

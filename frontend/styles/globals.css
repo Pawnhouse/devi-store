@@ -5,6 +5,13 @@ body {
     padding: 0;
 }
 
+button {
+    background: none;
+    padding: 0;
+    border: none;
+    cursor: pointer;
+}
+
 h1, h2, h3 {
     font-weight: 300;
 }
@@ -69,8 +76,6 @@ h1, h2, h3 {
     padding: 10px;
     background-color: #000000;
     color: white;
-    border: none;
-    cursor: pointer;
 }
 
 .submit-button:hover {
@@ -81,10 +86,6 @@ h1, h2, h3 {
     position: relative;
     width: 32px;
     height: 32px;
-    background: none;
-    padding: 0;
-    border: none;
-    cursor: pointer;
 }
 
 .small-icon-container {
