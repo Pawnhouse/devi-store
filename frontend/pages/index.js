@@ -11,6 +11,7 @@ export default function Home() {
     const pageRef = useRef(null);
     const router = useRouter();
     const { productId } = router.query;
+    const prevProductIdRef = useRef(productId);
 
     useEffect(() => {
         fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`)
@@ -18,6 +19,19 @@ export default function Home() {
             .then((data) => setProducts(data))
             .catch((err) => console.error('Error fetching products:', err));
     }, []);
+
+    useEffect(() => {
+        const prevProductId = prevProductIdRef.current;
+        if (
+            clickedProductId !== null &&
+            prevProductId !== undefined &&
+            productId === undefined
+        ) {
+            setClickedProductId(null);
+        }
+        prevProductIdRef.current = productId;
+    }, [productId, clickedProductId, setClickedProductId]);
+
 
     useEffect(() => {
         if (clickedProductId !== null && isImageLoaded && isAnimationComplete) {
