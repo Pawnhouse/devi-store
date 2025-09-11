@@ -42,15 +42,15 @@ export default function Cart() {
             .catch(err => console.error('Error fetching products for cart:', err));
     }, []);
 
-    const updateQuantity = (id, quantity) => {
+    const updateQuantity = (id, sizeId, quantity) => {
         const updatedCart = cart.map((item) =>
-            item.id === id ? { ...item, quantity: Math.max(1, Number(quantity)) } : item
+            item.id === id && item.size.id === sizeId ? { ...item, quantity: Math.max(1, Number(quantity)) } : item
         );
         updateCart(updatedCart);
     };
 
-    const removeItem = (id) => {
-        const updatedCart = cart.filter((item) => item.id !== id);
+    const removeItem = (id, sizeId) => {
+        const updatedCart = cart.filter((item) => item.id !== id || sizeId !== item.size.id);
         updateCart(updatedCart);
     };
 

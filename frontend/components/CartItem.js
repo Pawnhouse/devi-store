@@ -18,7 +18,7 @@ export default function CartItem({ item, updateQuantity, removeItem }) {
                 <div className="quantity-controls">
                     <button
                         className="icon-container small-icon-container"
-                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                        onClick={() => updateQuantity(item.id, item.size.id, item.quantity - 1)}
                     >
                         <Image
                             alt="Decrease quantity"
@@ -29,7 +29,7 @@ export default function CartItem({ item, updateQuantity, removeItem }) {
                     <span>{item.quantity}</span>
                     <button
                         className="icon-container small-icon-container"
-                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                        onClick={() => updateQuantity(item.id, item.size.id, item.quantity + 1)}
                     >
                         <Image
                             alt="Increase quantity"
@@ -43,7 +43,7 @@ export default function CartItem({ item, updateQuantity, removeItem }) {
 
             <button
                 className="icon-container small-icon-container"
-                onClick={() => removeItem(item.id)}
+                onClick={() => removeItem(item.id, item.size.id)}
             >
                 <Image
                     alt="Remove item"
