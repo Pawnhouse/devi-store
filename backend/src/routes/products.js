@@ -6,7 +6,8 @@ const router = express.Router();
 router.get('/', async (req, res) => {
     try {
         const result = await pool.query(`
-            SELECT p.*, 
+            SELECT p.*,
+                   p.price::float,
                    COALESCE(p.images, '{}') AS images,
                    COALESCE(
                        ARRAY_AGG(

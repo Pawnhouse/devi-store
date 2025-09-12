@@ -93,7 +93,7 @@ export default function ProductPage({ product, goToNextProductPage, goToPrevProd
                             </ToggleButton>
                         ))}
                     </StyledToggleButtonGroup>
-                    <p style={{ margin: "0" }}>{product.price} RUB</p>
+                    <p style={{ margin: "0" }}>{new Intl.NumberFormat('ru-RU').format(product.price)} RUB</p>
                     <p style={{ margin: "0" }}>{product.description}</p>
                     <button
                         onClick={() => addToCart(product, sizeId)}

@@ -71,7 +71,7 @@ export default function Cart() {
                             removeItem={removeItem}
                         />
                     ))}
-                    <p style={{ textAlign: 'right' }}>Subtotal: {total.toFixed(2)} RUB</p>
+                    <p style={{ textAlign: 'right' }}>Subtotal: {new Intl.NumberFormat('ru-RU').format(total)} RUB</p>
                     <OrderForm cart={cart}/>
                 </>
             )}

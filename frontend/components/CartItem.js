@@ -37,7 +37,7 @@ export default function CartItem({ item, updateQuantity, removeItem }) {
                             fill
                         />
                     </button>
-                    <p>{item.price} RUB</p>
+                    <p>{new Intl.NumberFormat('ru-RU').format(item.price)} RUB</p>
                 </div>
             </div>
 
