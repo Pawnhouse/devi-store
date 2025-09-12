@@ -2,34 +2,38 @@ import { useEffect, useRef, useState } from 'react';
 import ProductCard from '../components/ProductCard';
 import ProductPage from '../components/product/ProductPage';
 import { useRouter } from "next/router";
+import { AnimatePresence, motion } from "framer-motion";
+import useProductNavigation from "../hooks/useProductNavigation";
+import { ToastContainer } from "react-toastify";
 
 export default function Home() {
-    const [products, setProducts] = useState([]);
     const [clickedProductId, setClickedProductId] = useState(null);
     const [isAnimationComplete, setIsAnimationComplete] = useState(true);
     const [isImageLoaded, setIsImageLoaded] = useState(true);
     const pageRef = useRef(null);
     const router = useRouter();
     const { productId } = router.query;
-    const prevProductIdRef = useRef(productId);
+    const prevByHistoryProductIdRef = useRef(productId);
+    const [productPageAnimationProps, setProductPageAnimationProps] = useState({ initial: null, exit: null });
+
+    const {products, product, nextProduct, prevProduct } = useProductNavigation();
 
     useEffect(() => {
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`)
-            .then((res) => res.json())
-            .then((data) => setProducts(data))
-            .catch((err) => console.error('Error fetching products:', err));
-    }, []);
+        if (productId === undefined) {
+            setProductPageAnimationProps({ initial: null, exit: null });
+        }
+    }, [productId]);
 
     useEffect(() => {
-        const prevProductId = prevProductIdRef.current;
+        const prevByHistoryProductId = prevByHistoryProductIdRef.current;
         if (
             clickedProductId !== null &&
-            prevProductId !== undefined &&
+            prevByHistoryProductId !== undefined &&
             productId === undefined
         ) {
             setClickedProductId(null);
         }
-        prevProductIdRef.current = productId;
+        prevByHistoryProductIdRef.current = productId;
     }, [productId, clickedProductId, setClickedProductId]);
 
 
@@ -41,6 +45,26 @@ export default function Home() {
     }, [clickedProductId, isAnimationComplete, isImageLoaded]);
 
     const isProductPage = productId !== null && productId !== undefined;
+
+    const goToNextProductPage = () => {
+        if(nextProduct?.id !== undefined) {
+            setProductPageAnimationProps({
+                initial: { opacity: 0, y: '100%' },
+                exit: { opacity: 0, y: '-100%' },
+            });
+            router.push({ query: { productId: nextProduct.id } });
+        }
+
+    }
+    const goToPrevProductPage = () => {
+        if(prevProduct?.id !== undefined) {
+            setProductPageAnimationProps({
+                initial: { opacity: 0, y: '-100%' },
+                exit: { opacity: 0, y: '100%' },
+            });
+            router.push({ query: { productId: prevProduct.id } });
+        }
+    }
 
     const shouldShowProductPage = clickedProductId === null;
     return (
@@ -62,11 +86,26 @@ export default function Home() {
                     />
                 ))}
             </div>
-            {isProductPage &&
-                <div style={{ display: shouldShowProductPage ? 'block' : 'none' }}>
-                    <ProductPage onImageLoad={() => setIsImageLoaded(true)}/>
-                </div>
+            {isProductPage && product &&
+                <AnimatePresence mode="popLayout" onExitComplete={() => setProductPageAnimationProps({ initial: null, exit: null })}>
+                    <motion.div
+                        key={product.id}
+                        style={{ display: shouldShowProductPage ? 'block' : 'none' }}
+                        exit={productPageAnimationProps.exit}
+                        animate={{ opacity: 1, y: 0 }}
+                        initial={productPageAnimationProps.initial}
+                        transition={{duration:0.3}}
+                    >
+                        <ProductPage
+                            product={product}
+                            goToNextProductPage={goToNextProductPage}
+                            goToPrevProductPage={goToPrevProductPage}
+                            onImageLoad={() => setIsImageLoaded(true)}
+                        />
+                    </motion.div>
+                </AnimatePresence>
             }
+            <ToastContainer position="bottom-right" autoClose={3000} hideProgressBar/>
         </>
     );
 }

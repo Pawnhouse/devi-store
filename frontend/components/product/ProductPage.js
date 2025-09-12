@@ -1,8 +1,7 @@
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { styled, ToggleButton, toggleButtonClasses, ToggleButtonGroup, toggleButtonGroupClasses } from "@mui/material";
 import { PhotoCarousel } from "./PhotoCarousel";
@@ -26,53 +25,88 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
         },
 }));
 
-export default function ProductPage({ onImageLoad }) {
-    const router = useRouter();
-    const id = router.query.productId;
-    const [product, setProduct] = useState(null);
+export default function ProductPage({ product, goToNextProductPage, goToPrevProductPage, onImageLoad }) {
     const [sizeId, setSizeId] = useState(null);
+    const containerRef = useRef(null);
 
     useEffect(() => {
-        if (id) {
-            fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${id}`)
-                .then((res) => res.json())
-                .then((data) => {
-                    setProduct(data);
-                    setSizeId(data?.sizes[0].id);
-                })
-                .catch((err) => console.error('Error fetching product:', err));
+        if (product) {
+            setSizeId(product.sizes[0].id);
         }
-    }, [id]);
-    if (!product) return <div>Loading...</div>;
+    }, [product])
+
+    useEffect(() => {
+        const container = containerRef.current;
+        if (!container) return;
+
+        let startY, scrollY, scrollToBottomY;
+        let isStarted = false;
+
+        const onTouchStart = (e) => {
+            startY = e.touches[0].clientY;
+            scrollY = window.scrollY;
+            scrollToBottomY = document.documentElement.scrollHeight - window.innerHeight - window.scrollY;
+            isStarted = true;
+        };
+
+        const onTouchMove = (e) => {
+            if (!isStarted) {
+                if (e.cancelable) {
+                    e.preventDefault();
+                }
+                return;
+            }
+            const touchY = e.touches[0].clientY;
+            const redirectionMargin = 100;
+            if (touchY - startY > redirectionMargin + scrollY) {
+                goToPrevProductPage();
+                isStarted = false;
+            } else if (touchY - startY < -redirectionMargin - scrollToBottomY) {
+                goToNextProductPage();
+                isStarted = false;
+            }
+        };
+
+        container.addEventListener('touchstart', onTouchStart, { passive: false });
+        container.addEventListener('touchmove', onTouchMove, { passive: false });
+
+        return () => {
+            container.removeEventListener('touchstart', onTouchStart);
+            container.removeEventListener('touchmove', onTouchMove);
+        };
+    }, [product]);
 
     return (
-        <div className="product-details">
-            <PhotoCarousel images={product.images} onImageLoad={onImageLoad}/>
-            <h2>{product.name}</h2>
-            <StyledToggleButtonGroup
-                value={sizeId}
-                exclusive
-                onChange={(event, value) => value && setSizeId(value)}
-            >
-                {product.sizes.map((size) => (
-                    <ToggleButton value={size.id} key={size.id}>
-                        {size.abbrev}
-                    </ToggleButton>
-                ))}
-            </StyledToggleButtonGroup>
-            <p style={{ margin: "0" }}>{product.price} RUB</p>
-            <p style={{ margin: "0" }}>{product.description}</p>
-            <button
-                onClick={() => addToCart(product, sizeId)}
-                className="icon-container add-to-cart"
-            >
-                <Image
-                    alt="Add to Cart"
-                    src="/icons/plus-large-svgrepo-com.svg"
-                    fill
-                />
-            </button>
-            <ToastContainer position="bottom-right" autoClose={3000} hideProgressBar/>
+        <div className="product-details" ref={containerRef}>
+            {product &&
+                <>
+                    <PhotoCarousel images={product.images} onImageLoad={onImageLoad}/>
+                    <h2>{product.name}</h2>
+                    <StyledToggleButtonGroup
+                        value={sizeId}
+                        exclusive
+                        onChange={(event, value) => value && setSizeId(value)}
+                    >
+                        {product.sizes.map((size) => (
+                            <ToggleButton value={size.id} key={size.id}>
+                                {size.abbrev}
+                            </ToggleButton>
+                        ))}
+                    </StyledToggleButtonGroup>
+                    <p style={{ margin: "0" }}>{product.price} RUB</p>
+                    <p style={{ margin: "0" }}>{product.description}</p>
+                    <button
+                        onClick={() => addToCart(product, sizeId)}
+                        className="icon-container add-to-cart"
+                    >
+                        <Image
+                            alt="Add to Cart"
+                            src="/icons/plus-large-svgrepo-com.svg"
+                            fill
+                        />
+                    </button>
+                </>
+            }
         </div>
     );
 
