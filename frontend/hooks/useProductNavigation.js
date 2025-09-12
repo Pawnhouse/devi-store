@@ -18,6 +18,7 @@ function useProductNavigation() {
 
     useEffect(() => {
         if (products.length === 0 || productId === null || productId === undefined) {
+            setProduct(null);
             return;
         }
         setProduct(products.find(product => product.id === +productId));
