@@ -8,11 +8,19 @@ import {
     DialogActions,
     DialogContent,
     DialogContentText,
+    FormControl,
     FormControlLabel,
+    FormHelperText,
     Radio,
     RadioGroup,
     TextField
 } from "@mui/material";
+import dynamic from 'next/dynamic';
+
+const CdekWidget = dynamic(() => import('./CdekWidget'), { ssr: false });
+
+const PICK_UP_POINT_TYPE_ID = 1;
+const DELIVERY_TYPE_ID = 2;
 
 export default function OrderForm({ cart }) {
     const [deliveryTypes, setDeliveryTypes] = useState([]);
@@ -21,10 +29,13 @@ export default function OrderForm({ cart }) {
         email: '',
         phone: '',
         address: 'Москва',
-        deliveryTypeId: null
+        deliveryTypeId: null,
+        deliveryAddress: '',
+        pickUpPointAddress: ''
     });
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [helperText, setHelperText] = useState('');
     const router = useRouter();
     const handleClose = () => {
         setIsDialogOpen(false);
@@ -36,20 +47,60 @@ export default function OrderForm({ cart }) {
             .then(res => res.json())
             .then(types => {
                 setDeliveryTypes(types);
-                setFormData({ ...formData, deliveryTypeId: types[0].id });
             })
             .catch(err => console.error('Error fetching products for cart:', err));
     }, []);
 
     const handleInputChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+
+        let newData = {
+            ...formData,
+            [name]: name === 'deliveryTypeId' ? Number(value) : value
+        };
+        if (newData.address !== 'Москва' && newData.deliveryTypeId === DELIVERY_TYPE_ID) {
+            newData.deliveryTypeId = null;
+        }
+        if (name === 'deliveryTypeId') {
+            setHelperText('');
+        }
+        setFormData(newData);
+    };
+
+    const handleCdekChoose = (type, tariff, address) => {
+        setFormData((prev) => ({
+            ...prev,
+            address: address.city,
+            pickUpPointAddress: address.address
+        }));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (formData.deliveryTypeId === null) {
+            setHelperText('Выберите способ доставки');
+            return;
+        }
+        if (formData.deliveryTypeId === PICK_UP_POINT_TYPE_ID && !formData.pickUpPointAddress) {
+            setHelperText('Выберите пункт самовывоза');
+            return;
+        }
+        if (formData.deliveryTypeId === DELIVERY_TYPE_ID && !formData.deliveryAddress) {
+            setHelperText('Введите адрес доставки');
+            return;
+        }
+        setHelperText('');
+
         setIsLoading(true);
+        let address = formData.address;
+        if (formData.deliveryTypeId === DELIVERY_TYPE_ID) {
+            address = address + ', ' + formData.deliveryAddress;
+        } else if (formData.deliveryTypeId === PICK_UP_POINT_TYPE_ID) {
+            address = address + ', ' + formData.pickUpPointAddress;
+        }
         const order = {
             ...formData,
+            address: address,
             items: cart.map(item => ({
                 name: item.name,
                 quantity: item.quantity,
@@ -57,6 +108,7 @@ export default function OrderForm({ cart }) {
             })),
             total: cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
         };
+
         try {
             const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/orders`, {
                 method: 'POST',
@@ -78,7 +130,6 @@ export default function OrderForm({ cart }) {
 
     return (
         <>
-
             <form
                 className="flex-column"
                 onSubmit={handleSubmit}
@@ -118,22 +169,52 @@ export default function OrderForm({ cart }) {
                         onChange={handleInputChange}
                         required
                     />
-                    <RadioGroup
-                        name="deliveryTypeId"
-                        value={formData.deliveryTypeId}
-                        onChange={(e) => setFormData({ ...formData, deliveryTypeId: e.target.value })}
-                    >
-                        {
-                            deliveryTypes.map((item) => (
-                                <FormControlLabel
-                                    key={item.id}
-                                    value={item.id}
-                                    control={<Radio/>}
-                                    label={item.name}
-                                />
-                            ))
+                    <FormControl error={!!helperText} variant="standard">
+                        <RadioGroup
+                            name="deliveryTypeId"
+                            value={formData.deliveryTypeId}
+                            onChange={handleInputChange}
+                        >
+                            {
+                                deliveryTypes.map((item) => (
+                                    <FormControlLabel
+                                        key={item.id}
+                                        value={item.id}
+                                        control={<Radio/>}
+                                        label={item.name}
+                                        disabled={item.id === DELIVERY_TYPE_ID && formData.address !== 'Москва'}
+                                    />
+                                ))
+                            }
+                        </RadioGroup>
+                        <CdekWidget
+                            shouldShow={formData.deliveryTypeId === PICK_UP_POINT_TYPE_ID}
+                            defaultLocation={formData.address}
+                            onChoose={handleCdekChoose}
+                        />
+                        {formData.deliveryTypeId === DELIVERY_TYPE_ID &&
+                            <TextField
+                                label="Address"
+                                variant="standard"
+                                name="deliveryAddress"
+                                value={formData.deliveryAddress}
+                                onChange={handleInputChange}
+                                required
+                            />
                         }
-                    </RadioGroup>
+                        {formData.deliveryTypeId === PICK_UP_POINT_TYPE_ID &&
+                            <TextField
+                                label="Pick-up point"
+                                variant="standard"
+                                name="pickUpPointAddress"
+                                value={formData.pickUpPointAddress}
+                                onChange={handleInputChange}
+                                slotProps={{ input: { readOnly: true } }}
+                                required
+                            />
+                        }
+                        <FormHelperText>{helperText}</FormHelperText>
+                    </FormControl>
                 </fieldset>
                 <button
                     className="submit-button"

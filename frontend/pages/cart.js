@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import CartItem from "../components/CartItem";
-import OrderForm from "../components/OrderForm";
+import CartItem from "../components/cart/CartItem";
+import OrderForm from "../components/cart/OrderForm";
 
 export default function Cart() {
     const [cart, setCart] = useState([]);
