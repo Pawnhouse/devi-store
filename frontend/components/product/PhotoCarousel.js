@@ -44,16 +44,18 @@ export function PhotoCarousel({ images, onImageLoad }) {
             }}
         >
             {images.map((img, index) => (
-                <Image
-                    key={img}
-                    src={img}
-                    alt="Product Image"
-                    width={300}
-                    height={400}
-                    style={{ objectFit: 'contain' }}
-                    loading={index === 0 ? "eager" : "lazy"}
-                    onLoad={index === 0 ? onImageLoad : undefined}
-                />
+                <div key={img} style={{ position: "relative", width: '100%', height: '400px' }}>
+                    <Image
+                        src={img}
+                        alt="Product Image"
+                        fill
+                        sizes="300px"
+                        style={{ objectFit: 'contain' }}
+                        loading={index === 0 ? "eager" : "lazy"}
+                        priority={index === 0}
+                        onLoad={index === 0 ? onImageLoad : undefined}
+                    />
+                </div>
             ))}
         </Carousel>
     );

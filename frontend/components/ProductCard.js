@@ -80,6 +80,7 @@ export default function ProductCard(
                     alt={product.name}
                     fill
                     style={{ objectFit: 'contain' }}
+                    sizes="(max-width: 459px) 80px, (max-width: 768px) 135px, 200px"
                 />
             </motion.div>
             <motion.h3

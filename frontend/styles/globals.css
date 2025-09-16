@@ -146,6 +146,10 @@ legend {
     padding: 0;
 }
 
+.carousel-root {
+    width: 100%;
+}
+
 @media (max-width: 768px) {
     .product-grid {
         grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
