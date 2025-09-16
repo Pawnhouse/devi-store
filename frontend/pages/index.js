@@ -94,7 +94,7 @@ export default function Home() {
                         exit={productPageAnimationProps.exit}
                         animate={{ opacity: 1, y: 0 }}
                         initial={productPageAnimationProps.initial}
-                        transition={{duration:0.3}}
+                        transition={{ duration: 0.3 }}
                     >
                         <ProductPage
                             product={product}
