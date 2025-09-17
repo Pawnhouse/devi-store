@@ -150,6 +150,13 @@ legend {
     width: 100%;
 }
 
+.logo {
+    display: flex;
+    align-items: center;
+    height: 24px;
+    width: auto;
+}
+
 @media (max-width: 768px) {
     .product-grid {
         grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
@@ -188,6 +195,10 @@ legend {
     .icon-container {
         width: 24px;
         height: 24px;
+    }
+
+    .logo {
+        height: 18px;
     }
 
     .cart-item .image-wrapper {
