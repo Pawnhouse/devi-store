@@ -26,6 +26,16 @@ export default function ProductCard(
     const router = useRouter();
     const isClicked = clickedProductId === product.id;
 
+    const getImageHeight = () => {
+        const rect = imageRef.current.getBoundingClientRect();
+        const naturalWidth = imageRef.current.naturalWidth;
+        const naturalHeight = imageRef.current.naturalHeight;
+
+        const naturalAspect = naturalHeight / naturalWidth;
+        const containerAspect = rect.height / rect.width;
+        return rect.height * Math.min(1, naturalAspect / containerAspect);
+    }
+
     const handleClick = () => {
         if (!imageRef.current || isAnimation) {
             return;
@@ -36,8 +46,12 @@ export default function ProductCard(
         const currentCenterX = rect.left + rect.width / 2;
         const currentTop = rect.top;
         const carouselHeight = 400;
-        const imageHeight = Math.min(carouselHeight, (window.innerWidth - 68) / 3 * 4)
-        const scale = imageHeight / rect.height;
+        const containerWidth = window.innerWidth - (window.innerWidth <= 459 ? 68 : 84);
+        const imageHeight = Math.min(
+            carouselHeight,
+            containerWidth / imageRef.current.naturalWidth * imageRef.current.naturalHeight
+        );
+        const scale = imageHeight / getImageHeight();
         const x = viewportCenterX - currentCenterX;
         const y = window.scrollY + pageRef.current.getBoundingClientRect().top - currentTop
             + (carouselHeight - rect.height) / 2;
@@ -69,13 +83,13 @@ export default function ProductCard(
         <button onClick={handleClick}>
             <motion.div
                 className="image-wrapper"
-                ref={imageRef}
                 style={{ zIndex: isClicked ? 1 : 0 }}
                 animate={imageAnimate}
                 transition={transition}
                 onAnimationComplete={() => isClicked && setIsAnimationComplete(true)}
             >
                 <Image
+                    ref={imageRef}
                     src={product.images[0]}
                     alt={product.name}
                     fill
