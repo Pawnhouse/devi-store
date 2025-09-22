@@ -37,7 +37,7 @@ CREATE TABLE orders
     id               SERIAL PRIMARY KEY,
     name             VARCHAR(255)   NOT NULL,
     email            VARCHAR(255)   NOT NULL,
-    address          TEXT           NOT NULL,
+    address          TEXT,
     phone            VARCHAR(20)    NOT NULL,
     items            JSONB          NOT NULL,
     total            DECIMAL(10, 2) NOT NULL,
