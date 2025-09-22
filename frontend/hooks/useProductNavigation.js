@@ -12,6 +12,17 @@ function useProductNavigation() {
     useEffect(() => {
         fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`)
             .then(res => res.json())
+            .then(data => {
+                const certificates = data.filter(item => item.isCertificate)
+                if (certificates.length > 0) {
+                    certificates.sort((a, b) => a.price - b.price);
+                    const certificate = certificates[0];
+                    certificate.options = certificates;
+                    data = data.filter(item => !item.isCertificate)
+                    data.push(certificate);
+                }
+                return data;
+            })
             .then(data => setProducts(data))
             .catch(err => console.error('Error fetching products:', err));
     }, []);

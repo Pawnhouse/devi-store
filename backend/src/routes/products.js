@@ -24,7 +24,16 @@ router.get('/', async (req, res) => {
             GROUP BY p.id, p.display_order
             ORDER BY p.display_order, p.id
         `);
-        res.json(result.rows);
+
+        const renamedRows = result.rows.map(row => {
+            const newRow = {
+                ...row,
+                isCertificate: row.is_certificate,
+            }
+            delete newRow.is_certificate;
+            return newRow;
+        });
+        res.json(renamedRows);
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Server error' });

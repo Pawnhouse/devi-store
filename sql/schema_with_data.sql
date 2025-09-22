@@ -18,6 +18,7 @@ CREATE TABLE products
     name   VARCHAR(255) NOT NULL,
     description TEXT,
     price       DECIMAL(10, 2) NOT NULL,
+    is_certificate BOOLEAN DEFAULT FALSE,
     display_order INT,
     images TEXT[] DEFAULT '{}'
 );

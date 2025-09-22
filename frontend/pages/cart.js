@@ -18,7 +18,7 @@ export default function Cart() {
                     size: product.sizes.find(size => size.id === item.sizeId)
                 };
             })
-            .filter(item => item.size);
+            .filter(item => item.size || item.isCertificate);
     }
 
     function updateCart(cart) {
@@ -26,7 +26,7 @@ export default function Cart() {
         localStorage.setItem('cart', JSON.stringify(cart.map((item) => ({
             id: item.id,
             quantity: item.quantity,
-            sizeId: item.size.id
+            sizeId: item.size?.id || null
         }))));
     }
 
@@ -44,13 +44,13 @@ export default function Cart() {
 
     const updateQuantity = (id, sizeId, quantity) => {
         const updatedCart = cart.map((item) =>
-            item.id === id && item.size.id === sizeId ? { ...item, quantity: Math.max(1, Number(quantity)) } : item
+            item.id === id && item.size?.id === sizeId ? { ...item, quantity: Math.max(1, Number(quantity)) } : item
         );
         updateCart(updatedCart);
     };
 
     const removeItem = (id, sizeId) => {
-        const updatedCart = cart.filter((item) => item.id !== id || sizeId !== item.size.id);
+        const updatedCart = cart.filter((item) => item.id !== id || sizeId !== item.size?.id);
         updateCart(updatedCart);
     };
 
@@ -65,7 +65,7 @@ export default function Cart() {
                 <>
                     {cart.map((item) => (
                         <CartItem
-                            key={item.id + '-' + item.size.id}
+                            key={item.id + '-' + (item.size?.id || '')}
                             item={item}
                             updateQuantity={updateQuantity}
                             removeItem={removeItem}

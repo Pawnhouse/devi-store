@@ -53,7 +53,7 @@ export function PhotoCarousel({ images, onImageLoad }) {
                         style={{ objectFit: 'contain' }}
                         loading={index === 0 ? "eager" : "lazy"}
                         priority={index === 0}
-                        onLoadingComplete={index === 0 ? onImageLoad : undefined}
+                        onLoad={index === 0 ? onImageLoad : undefined}
                     />
                 </div>
             ))}

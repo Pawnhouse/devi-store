@@ -27,13 +27,18 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
 
 export default function ProductPage({ product, goToNextProductPage, goToPrevProductPage, onImageLoad }) {
     const [sizeId, setSizeId] = useState(null);
+    const [certificate, setCertificate] = useState(null);
     const containerRef = useRef(null);
 
     useEffect(() => {
-        if (product) {
+        if (product.isCertificate) {
+            setSizeId(null);
+            setCertificate(product);
+        } else {
             setSizeId(product.sizes[0].id);
+            setCertificate(null);
         }
-    }, [product])
+    }, [product]);
 
     useEffect(() => {
         const container = containerRef.current;
@@ -82,21 +87,40 @@ export default function ProductPage({ product, goToNextProductPage, goToPrevProd
                 <>
                     <PhotoCarousel images={product.images} onImageLoad={onImageLoad}/>
                     <h2>{product.name}</h2>
-                    <StyledToggleButtonGroup
-                        value={sizeId}
-                        exclusive
-                        onChange={(event, value) => value && setSizeId(value)}
-                    >
-                        {product.sizes.map((size) => (
-                            <ToggleButton value={size.id} key={size.id}>
-                                {size.abbrev}
-                            </ToggleButton>
-                        ))}
-                    </StyledToggleButtonGroup>
-                    <p style={{ margin: "0" }}>{new Intl.NumberFormat('ru-RU').format(product.price)} RUB</p>
+                    {product.isCertificate
+                        ? (
+                            <StyledToggleButtonGroup
+                                value={certificate?.id}
+                                exclusive
+                                onChange={(event, value) => {
+                                    return value && setCertificate(product.options.find(item => item.id === value));
+                                }}
+                            >
+                                {product.options.map((option) => (
+                                    <ToggleButton value={option.id} key={option.id}>
+                                        {new Intl.NumberFormat('ru-RU').format(option.price)}
+                                    </ToggleButton>
+                                ))}
+                            </StyledToggleButtonGroup>
+                        )
+                        : (
+                            <StyledToggleButtonGroup
+                                value={sizeId}
+                                exclusive
+                                onChange={(event, value) => value && setSizeId(value)}
+                            >
+                                {product.sizes.map((size) => (
+                                    <ToggleButton value={size.id} key={size.id}>
+                                        {size.abbrev}
+                                    </ToggleButton>
+                                ))}
+                            </StyledToggleButtonGroup>
+                        )
+                    }
+                    <p style={{ margin: "0" }}>{new Intl.NumberFormat('ru-RU').format((certificate || product).price)} RUB</p>
                     <p style={{ margin: "0" }}>{product.description}</p>
                     <button
-                        onClick={() => addToCart(product, sizeId)}
+                        onClick={() => addToCart(certificate || product, sizeId)}
                         className="icon-container add-to-cart"
                     >
                         <Image

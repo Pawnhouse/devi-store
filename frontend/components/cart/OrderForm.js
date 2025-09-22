@@ -101,11 +101,21 @@ export default function OrderForm({ cart }) {
         const order = {
             ...formData,
             address: address,
-            items: cart.map(item => ({
-                name: item.name,
-                quantity: item.quantity,
-                size: item.size.abbrev
-            })),
+            items: cart.map(item => {
+                if (item.isCertificate) {
+                    return {
+                        name: item.name,
+                        quantity: item.quantity,
+                        price: item.price
+                    }
+                } else {
+                    return {
+                        name: item.name,
+                        quantity: item.quantity,
+                        size: item.size.abbrev
+                    };
+                }
+            }),
             total: cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
         };
 
