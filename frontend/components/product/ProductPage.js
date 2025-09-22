@@ -7,6 +7,7 @@ import { styled, ToggleButton, toggleButtonClasses, ToggleButtonGroup, toggleBut
 import { PhotoCarousel } from "./PhotoCarousel";
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
+    flexWrap: 'wrap',
     gap: '1.5rem',
     [`& .${toggleButtonGroupClasses.firstButton}, & .${toggleButtonGroupClasses.middleButton}`]:
         {
