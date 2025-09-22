@@ -28,7 +28,6 @@ export default function OrderForm({ cart }) {
         name: '',
         email: '',
         phone: '',
-        address: 'Москва',
         deliveryTypeId: null,
         deliveryAddress: '',
         pickUpPointAddress: ''
@@ -58,9 +57,6 @@ export default function OrderForm({ cart }) {
             ...formData,
             [name]: name === 'deliveryTypeId' ? Number(value) : value
         };
-        if (newData.address !== 'Москва' && newData.deliveryTypeId === DELIVERY_TYPE_ID) {
-            newData.deliveryTypeId = null;
-        }
         if (name === 'deliveryTypeId') {
             setHelperText('');
         }
@@ -70,8 +66,7 @@ export default function OrderForm({ cart }) {
     const handleCdekChoose = (type, tariff, address) => {
         setFormData((prev) => ({
             ...prev,
-            address: address.city,
-            pickUpPointAddress: address.address
+            pickUpPointAddress: address.city + ', ' + address.address
         }));
     };
 
@@ -92,11 +87,11 @@ export default function OrderForm({ cart }) {
         setHelperText('');
 
         setIsLoading(true);
-        let address = formData.address;
+        let address = null;
         if (formData.deliveryTypeId === DELIVERY_TYPE_ID) {
-            address = address + ', ' + formData.deliveryAddress;
+            address = formData.deliveryAddress;
         } else if (formData.deliveryTypeId === PICK_UP_POINT_TYPE_ID) {
-            address = address + ', ' + formData.pickUpPointAddress;
+            address = formData.pickUpPointAddress;
         }
         const order = {
             ...formData,
@@ -171,14 +166,6 @@ export default function OrderForm({ cart }) {
                 />
                 <fieldset className="flex-column">
                     <legend>Delivery</legend>
-                    <TextField
-                        label="City"
-                        variant="standard"
-                        name="address"
-                        value={formData.address}
-                        onChange={handleInputChange}
-                        required
-                    />
                     <FormControl error={!!helperText} variant="standard">
                         <RadioGroup
                             name="deliveryTypeId"
@@ -192,14 +179,12 @@ export default function OrderForm({ cart }) {
                                         value={item.id}
                                         control={<Radio/>}
                                         label={item.name}
-                                        disabled={item.id === DELIVERY_TYPE_ID && formData.address !== 'Москва'}
                                     />
                                 ))
                             }
                         </RadioGroup>
                         <CdekWidget
                             shouldShow={formData.deliveryTypeId === PICK_UP_POINT_TYPE_ID}
-                            defaultLocation={formData.address}
                             onChoose={handleCdekChoose}
                         />
                         {formData.deliveryTypeId === DELIVERY_TYPE_ID &&

@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { motion } from 'framer-motion';
 import CDEKWidget from '@cdek-it/widget';
 
-export default function CdekWidget({ shouldShow, defaultLocation, onChoose }) {
+export default function CdekWidget({ shouldShow, onChoose }) {
     const widgetRef = useRef(null);
 
     useEffect(() => {
@@ -11,7 +11,7 @@ export default function CdekWidget({ shouldShow, defaultLocation, onChoose }) {
                 root: 'cdek-map',
                 apiKey: process.env.NEXT_PUBLIC_YANDEX_API_KEY,
                 servicePath: `${process.env.NEXT_PUBLIC_API_URL}/cdek-service`,
-                defaultLocation,
+                defaultLocation: 'Москва',
                 lang: 'rus',
                 currency: 'RUB',
                 hideDeliveryOptions: {
@@ -21,7 +21,7 @@ export default function CdekWidget({ shouldShow, defaultLocation, onChoose }) {
                 onChoose
             });
         }
-    }, [shouldShow, defaultLocation, onChoose]);
+    }, [shouldShow, onChoose]);
 
     return (
         <motion.div
