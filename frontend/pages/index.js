@@ -6,7 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import useProductNavigation from "../hooks/useProductNavigation";
 import { ToastContainer } from "react-toastify";
 
-export default function Home() {
+export default function Home({ gridColumnNumber }) {
     const [clickedProductId, setClickedProductId] = useState(null);
     const [isAnimationComplete, setIsAnimationComplete] = useState(true);
     const [isImageLoaded, setIsImageLoaded] = useState(true);
@@ -14,6 +14,7 @@ export default function Home() {
     const router = useRouter();
     const { productId } = router.query;
     const prevByHistoryProductIdRef = useRef(productId);
+    const prevGridColumnNumberRef = useRef(null);
     const [productPageAnimationProps, setProductPageAnimationProps] = useState({ initial: null, exit: null });
 
     const {products, product, nextProduct, prevProduct } = useProductNavigation();
@@ -54,8 +55,7 @@ export default function Home() {
             });
             router.push({ query: { productId: nextProduct.id } });
         }
-
-    }
+    };
     const goToPrevProductPage = () => {
         if(prevProduct?.id !== undefined) {
             setProductPageAnimationProps({
@@ -64,7 +64,32 @@ export default function Home() {
             });
             router.push({ query: { productId: prevProduct.id } });
         }
+    };
+
+    if (prevGridColumnNumberRef.current === null) {
+        prevGridColumnNumberRef.current = gridColumnNumber;
     }
+
+    let imageGridAnimate, textGridAnimate;
+
+    if (pageRef.current !== null && prevGridColumnNumberRef.current !== gridColumnNumber) {
+        const containerWidth = pageRef.current.getBoundingClientRect().width;
+        const gap = 20;
+        const prevWidth = (containerWidth - (prevGridColumnNumberRef.current - 1) * gap) / prevGridColumnNumberRef.current;
+        const currentWidth = (containerWidth - (gridColumnNumber - 1) * gap) / gridColumnNumber;
+
+        imageGridAnimate = {
+            scale: [null, prevWidth / currentWidth, 1],
+            transition: { duration: 0.25, times: [0, 0, 1] },
+        };
+        textGridAnimate = {
+            translateX: [null, (prevWidth - currentWidth) / 2, 0],
+            translateY: [null, (prevWidth - currentWidth) * 1.33, 0],
+            transition: { duration: 0.25, times: [0, 0, 1] },
+        };
+        prevGridColumnNumberRef.current = gridColumnNumber;
+    }
+
 
     const shouldShowProductPage = clickedProductId === null;
     return (
@@ -72,13 +97,17 @@ export default function Home() {
             <div
                 className="product-grid"
                 ref={pageRef}
-                style={{ display: isProductPage && shouldShowProductPage ? 'none' : 'grid' }}
+                style={{
+                    display: isProductPage && shouldShowProductPage ? 'none' : 'grid',
+                    gridTemplateColumns: `repeat(${gridColumnNumber}, minmax(80px, 1fr))`,
+                }}
             >
                 {products.map((product) => (
                     <ProductCard
                         key={product.id}
                         product={product}
                         pageRef={pageRef}
+                        gridAnimationProps={{ imageAnimate: imageGridAnimate, textAnimate: textGridAnimate }}
                         clickedProductId={clickedProductId}
                         setClickedProductId={setClickedProductId}
                         setIsAnimationComplete={setIsAnimationComplete}

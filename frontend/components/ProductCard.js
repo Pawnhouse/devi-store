@@ -8,6 +8,7 @@ export default function ProductCard(
         product,
         pageRef,
         clickedProductId,
+        gridAnimationProps,
         setClickedProductId,
         setIsAnimationComplete,
         setIsImageLoaded
@@ -23,6 +24,8 @@ export default function ProductCard(
     const isAnimation = clickedProductId !== null;
     const transition = { duration: isAnimation ? 0.25 : 0, ease: 'easeInOut' };
 
+    const [isGridAnimation, setIsGridAnimation] = useState(false);
+
     const router = useRouter();
     const isClicked = clickedProductId === product.id;
 
@@ -37,7 +40,7 @@ export default function ProductCard(
     }
 
     const handleClick = () => {
-        if (!imageRef.current || isAnimation) {
+        if (!imageRef.current || isAnimation || isGridAnimation) {
             return;
         }
 
@@ -80,30 +83,43 @@ export default function ProductCard(
     const textAnimate = isAnimation ? { opacity: 0 } : undefined;
 
     return (
-        <button onClick={handleClick}>
+        <motion.button
+            layout="position"
+            transition={{ type: "spring", duration: 0.3, bounce: 0.15 }}
+            onClick={handleClick}
+            onLayoutAnimationStart={() => setIsGridAnimation(true)}
+            onLayoutAnimationComplete={() => setIsGridAnimation(false)}
+        >
             <motion.div
-                className="image-wrapper"
-                style={{ zIndex: isClicked ? 1 : 0 }}
-                animate={imageAnimate}
-                transition={transition}
-                onAnimationComplete={() => isClicked && setIsAnimationComplete(true)}
+                animate={gridAnimationProps.imageAnimate}
+                style={{ transformOrigin: "top left" }}
             >
-                <Image
-                    ref={imageRef}
-                    src={product.images[0]}
-                    alt={product.name}
-                    fill
-                    style={{ objectFit: 'contain' }}
-                    sizes="(max-width: 459px) 80px, (max-width: 768px) 135px, 200px"
-                />
+                <motion.div
+                    className="image-wrapper"
+                    style={{ zIndex: isClicked ? 1 : 0 }}
+                    animate={imageAnimate}
+                    transition={transition}
+                    onAnimationComplete={() => isClicked && setIsAnimationComplete(true)}
+                >
+                    <Image
+                        ref={imageRef}
+                        src={product.images[0]}
+                        alt={product.name}
+                        fill
+                        style={{ objectFit: 'contain' }}
+                        sizes="(max-width: 459px) 80px, (max-width: 768px) 135px, 200px"
+                    />
+                </motion.div>
             </motion.div>
-            <motion.h3
-                animate={textAnimate}
-                className="product-name"
-                transition={transition}
-            >
-                {product.code}
-            </motion.h3>
-        </button>
+            <motion.div animate={gridAnimationProps.textAnimate}>
+                <motion.h3
+                    animate={textAnimate}
+                    className="product-name"
+                    transition={transition}
+                >
+                    {product.code}
+                </motion.h3>
+            </motion.div>
+        </motion.button>
     );
 }

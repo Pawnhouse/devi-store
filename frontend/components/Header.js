@@ -1,12 +1,15 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import NavigationMenu from "./NavigationMenu";
 import Logo from '../public/images/logo.svg';
+import GridButton from "./GridButton";
 
-export default function Header() {
+export default function Header({ isPlus, onPlusClick, onMinusClick }) {
     return (
         <header style={{ padding: '1rem 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <NavigationMenu />
+            <GridButton
+                isPlus={isPlus}
+                onClick={isPlus ? onPlusClick : onMinusClick}
+            />
             <Link href="/">
                 <Image
                     className="logo"
