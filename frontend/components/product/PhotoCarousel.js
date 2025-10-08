@@ -1,13 +1,22 @@
 import Image from "next/image";
 import { Carousel } from "react-responsive-carousel";
+import { useEffect, useState } from "react";
 
 export function PhotoCarousel({ images, onImageLoad }) {
+    const [showArrows, setShowArrows] = useState(true);
+
+    useEffect(() => {
+        if (window.innerWidth <= 459) {
+            setShowArrows(false);
+        }
+    }, []);
     return (
         <Carousel
             showThumbs={false}
             showStatus={false}
             showIndicators={false}
             infiniteLoop={true}
+            showArrows={showArrows}
             renderArrowPrev={(clickHandler, hasPrev) => {
                 return (
                     <div
