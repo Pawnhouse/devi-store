@@ -12,7 +12,7 @@ export default function MyApp({ Component, pageProps }) {
 
     useEffect(() => {
         if (window.innerWidth <= 459) {
-            setGridColumnNumberOptions([4, 3, 2]);
+            setGridColumnNumberOptions([4, 3, 2, 1]);
         } else if (window.innerWidth <= 1024) {
             setGridColumnNumberOptions([6, 4, 3]);
         } else {
