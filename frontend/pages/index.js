@@ -99,7 +99,7 @@ export default function Home({ gridColumnNumber }) {
                 ref={pageRef}
                 style={{
                     display: isProductPage && shouldShowProductPage ? 'none' : 'grid',
-                    gridTemplateColumns: `repeat(${gridColumnNumber}, minmax(80px, 1fr))`,
+                    gridTemplateColumns: `repeat(${gridColumnNumber}, minmax(80px, 300px))`,
                 }}
             >
                 {products.map((product) => (
