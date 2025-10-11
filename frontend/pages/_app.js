@@ -4,11 +4,22 @@ import Head from "next/head";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "../theme";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 export default function MyApp({ Component, pageProps }) {
     const [isPlus, setIsPlus] = useState(true);
     const [gridColumnNumberOptions, setGridColumnNumberOptions] = useState([]);
     const [gridColumnNumberOptionIndex, setGridColumnNumberOptionIndex] = useState(0);
+    const router = useRouter();
+    const isCatalog = router.asPath === '/';
+    let gridButtonAnimate;
+    if (isCatalog && isPlus) {
+        gridButtonAnimate = 'plus';
+    } else if (isCatalog && !isPlus) {
+        gridButtonAnimate = 'minus';
+    } else {
+        gridButtonAnimate = 'back';
+    }
 
     useEffect(() => {
         if (window.innerWidth <= 459) {
@@ -28,6 +39,19 @@ export default function MyApp({ Component, pageProps }) {
         }
     }, [gridColumnNumberOptions, gridColumnNumberOptionIndex]);
 
+    const handleGridButtonClick = () => {
+        switch (gridButtonAnimate) {
+            case 'plus':
+                setGridColumnNumberOptionIndex((value) => value + 1);
+                break;
+            case 'minus':
+                setGridColumnNumberOptionIndex((value) => value - 1);
+                break
+            case 'back':
+                router.push('/');
+        }
+    }
+
     return (
         <>
             <Head>
@@ -39,9 +63,8 @@ export default function MyApp({ Component, pageProps }) {
             <ThemeProvider theme={theme}>
                 <div className="container">
                     <Header
-                        isPlus={isPlus}
-                        onPlusClick={() => setGridColumnNumberOptionIndex((value) => value + 1)}
-                        onMinusClick={() => setGridColumnNumberOptionIndex((value) => value - 1)}
+                        gridButtonAnimate={gridButtonAnimate}
+                        handleGridButtonClick={handleGridButtonClick}
                     />
                     <Component {...pageProps} gridColumnNumber={gridColumnNumberOptions[gridColumnNumberOptionIndex]}/>
                 </div>

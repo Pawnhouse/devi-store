@@ -1,16 +1,34 @@
 import { motion } from 'framer-motion';
-import { useRouter } from "next/router";
 
-export default function GridButton({ isPlus, onClick }) {
-    const router = useRouter();
-    const isCatalog = router.asPath === '/';
+export default function GridButton({ gridButtonAnimate, handleGridButtonClick }) {
+    const firstBarVariants = {
+        plus: {
+            d: 'M4 12 L20 12'
+        },
+        minus: {
+            d: 'M4 12 L20 12'
+        },
+        back: {
+            d: 'M4 12 L10 18'
+        }
+    };
+    const secondBarVariants = {
+        plus: {
+            d: 'M12 20 L12 4',
+            opacity: 1
+        },
+        minus: {
+            opacity: 0
+        },
+        back: {
+            d: 'M4 12 L10 6',
+            opacity: 1
+        }
+    }
     return (
         <button
             className="icon-container"
-            onClick={isCatalog ? onClick : undefined}
-            disabled={!isCatalog}
-            tabIndex={isCatalog ? 0 : -1}
-            style={isCatalog ? undefined : { cursor: 'default' }}
+            onClick={handleGridButtonClick}
         >
             <svg viewBox="0 0 24 24" fill="none">
                 <motion.path
@@ -18,18 +36,18 @@ export default function GridButton({ isPlus, onClick }) {
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    d="M4 12H20"
                     initial={false}
-                    animate={{ opacity: isCatalog ? 1 : 0 }}
+                    animate={gridButtonAnimate}
+                    variants={firstBarVariants}
                 />
                 <motion.path
                     stroke="#000000"
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    d="M12 4V20"
                     initial={false}
-                    animate={{ opacity: isCatalog && isPlus ? 1 : 0 }}
+                    animate={gridButtonAnimate}
+                    variants={secondBarVariants}
                 />
             </svg>
         </button>

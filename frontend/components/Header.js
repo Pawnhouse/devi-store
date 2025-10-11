@@ -3,12 +3,12 @@ import Image from 'next/image';
 import Logo from '../public/images/logo.svg';
 import GridButton from "./GridButton";
 
-export default function Header({ isPlus, onPlusClick, onMinusClick }) {
+export default function Header({ gridButtonAnimate, handleGridButtonClick }) {
     return (
         <header style={{ padding: '1rem 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <GridButton
-                isPlus={isPlus}
-                onClick={isPlus ? onPlusClick : onMinusClick}
+                gridButtonAnimate={gridButtonAnimate}
+                handleGridButtonClick={handleGridButtonClick}
             />
             <Link href="/">
                 <Image
