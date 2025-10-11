@@ -4,6 +4,7 @@ import Head from "next/head";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "../theme";
 import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/router";
 
 export default function MyApp({ Component, pageProps }) {
@@ -52,6 +53,7 @@ export default function MyApp({ Component, pageProps }) {
         }
     }
 
+    const isCartPage = router.pathname === "/cart";
     return (
         <>
             <Head>
@@ -66,7 +68,37 @@ export default function MyApp({ Component, pageProps }) {
                         gridButtonAnimate={gridButtonAnimate}
                         handleGridButtonClick={handleGridButtonClick}
                     />
-                    <Component {...pageProps} gridColumnNumber={gridColumnNumberOptions[gridColumnNumberOptionIndex]}/>
+                    <AnimatePresence initial={false} mode="popLayout">
+                        {isCartPage ? (
+                            <motion.div
+                                className="cart-container"
+                                key={router.pathname}
+                            >
+                                <motion.div
+                                    className="cart-animate-container"
+                                    initial={{ left: "100%" }}
+                                    animate={{ left: 0 }}
+                                    exit={{ translateX: "100%" }}
+                                    transition={{ type: "tween", ease: "easeInOut", duration: 0.5 }}
+                                >
+                                    <Component {...pageProps} />
+                                </motion.div>
+                            </motion.div>
+                        ) : (
+                            <motion.div
+                                key={router.pathname}
+                                transition={{ duration: 0.5 }}
+                                initial={{ opacity: 0.9 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0.9 }}
+                            >
+                                <Component
+                                    {...pageProps}
+                                    gridColumnNumber={gridColumnNumberOptions[gridColumnNumberOptionIndex]}
+                                />
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
                 </div>
             </ThemeProvider>
         </>
