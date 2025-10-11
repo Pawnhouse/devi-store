@@ -18,6 +18,7 @@ export default function GridButton({ gridButtonAnimate, handleGridButtonClick })
             opacity: 1
         },
         minus: {
+            d: 'M12 20 L12 4',
             opacity: 0
         },
         back: {
