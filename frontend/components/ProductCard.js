@@ -70,7 +70,12 @@ export default function ProductCard(
         );
     };
 
-    let imageAnimate;
+    let imageAnimate = {
+        scale: 1,
+        translateX: 0,
+        translateY: 0,
+        opacity: 1
+    };
     if (isAnimation) {
         imageAnimate = isClicked ? {
                 scale: animationProps.scale,
@@ -80,7 +85,7 @@ export default function ProductCard(
             }
             : { ...initialState, opacity: 0 };
     }
-    const textAnimate = isAnimation ? { opacity: 0 } : undefined;
+    const textAnimate = { opacity: isAnimation ? 0 : 1 };
 
     return (
         <motion.button
