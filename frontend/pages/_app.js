@@ -6,6 +6,7 @@ import { theme } from "../theme";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/router";
+import { ToastContainer } from "react-toastify";
 
 export default function MyApp({ Component, pageProps }) {
     const [isPlus, setIsPlus] = useState(true);
@@ -100,6 +101,7 @@ export default function MyApp({ Component, pageProps }) {
                         )}
                     </AnimatePresence>
                 </div>
+                <ToastContainer position="bottom-right" autoClose={3000} hideProgressBar/>
             </ThemeProvider>
         </>
     );

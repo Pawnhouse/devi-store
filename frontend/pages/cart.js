@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import CartItem from "../components/cart/CartItem";
 import OrderForm from "../components/cart/OrderForm";
@@ -75,7 +74,6 @@ export default function Cart() {
                     <OrderForm cart={cart}/>
                 </>
             )}
-            <ToastContainer position="bottom-right" autoClose={3000} hideProgressBar/>
         </div>
     );
 }

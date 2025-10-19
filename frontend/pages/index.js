@@ -4,7 +4,6 @@ import ProductPage from '../components/product/ProductPage';
 import { useRouter } from "next/router";
 import { AnimatePresence, motion } from "framer-motion";
 import useProductNavigation from "../hooks/useProductNavigation";
-import { ToastContainer } from "react-toastify";
 
 export default function Home({ gridColumnNumber }) {
     const [clickedProductId, setClickedProductId] = useState(null);
@@ -134,7 +133,6 @@ export default function Home({ gridColumnNumber }) {
                     </motion.div>
                 </AnimatePresence>
             }
-            <ToastContainer position="bottom-right" autoClose={3000} hideProgressBar/>
         </>
     );
 }
