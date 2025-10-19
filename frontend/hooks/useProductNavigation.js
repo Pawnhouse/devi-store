@@ -8,6 +8,7 @@ function useProductNavigation() {
     const [nextProduct, setNextProduct] = useState(null);
     const router = useRouter();
     const { productId } = router.query;
+    const isCartPage = router.pathname === '/cart';
 
     useEffect(() => {
         fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`)
@@ -28,6 +29,9 @@ function useProductNavigation() {
     }, []);
 
     useEffect(() => {
+        if (isCartPage) {
+            return;
+        }
         if (products.length === 0 || productId === null || productId === undefined) {
             setProduct(null);
             return;
@@ -42,7 +46,7 @@ function useProductNavigation() {
         }
         setPrevProduct(products[(index + products.length - 1) % products.length]);
         setNextProduct(products[(index + 1) % products.length]);
-    }, [products, productId]);
+    }, [products, productId, isCartPage]);
 
     return {
         products,

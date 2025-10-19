@@ -44,8 +44,6 @@ export default function Home({ gridColumnNumber }) {
         }
     }, [clickedProductId, isAnimationComplete, isImageLoaded]);
 
-    const isProductPage = productId !== null && productId !== undefined;
-
     const goToNextProductPage = () => {
         if(nextProduct?.id !== undefined) {
             setProductPageAnimationProps({
@@ -89,15 +87,15 @@ export default function Home({ gridColumnNumber }) {
         prevGridColumnNumberRef.current = gridColumnNumber;
     }
 
-
-    const shouldShowProductPage = clickedProductId === null;
+    const isProductPage = (productId !== null && productId !== undefined) || (router.pathname === '/cart' && product);
+    const shouldShowProductPage = isProductPage && clickedProductId === null;
     return (
         <>
             <div
                 className="product-grid"
                 ref={pageRef}
                 style={{
-                    display: isProductPage && shouldShowProductPage ? 'none' : 'grid',
+                    display: shouldShowProductPage ? 'none' : 'grid',
                     gridTemplateColumns: `repeat(${gridColumnNumber}, minmax(80px, 300px))`,
                 }}
             >
