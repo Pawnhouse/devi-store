@@ -20,7 +20,7 @@ import dynamic from 'next/dynamic';
 const CdekWidget = dynamic(() => import('./CdekWidget'), { ssr: false });
 
 const PICK_UP_POINT_TYPE_ID = 1;
-const DELIVERY_TYPE_ID = 2;
+const DELIVERY_TYPE_IDS = [2, 4];
 
 export default function OrderForm({ cart }) {
     const [deliveryTypes, setDeliveryTypes] = useState([]);
@@ -80,7 +80,7 @@ export default function OrderForm({ cart }) {
             setHelperText('Выберите пункт самовывоза');
             return;
         }
-        if (formData.deliveryTypeId === DELIVERY_TYPE_ID && !formData.deliveryAddress) {
+        if (DELIVERY_TYPE_IDS.includes(formData.deliveryTypeId) && !formData.deliveryAddress) {
             setHelperText('Введите адрес доставки');
             return;
         }
@@ -88,7 +88,7 @@ export default function OrderForm({ cart }) {
 
         setIsLoading(true);
         let address = null;
-        if (formData.deliveryTypeId === DELIVERY_TYPE_ID) {
+        if (DELIVERY_TYPE_IDS.includes(formData.deliveryTypeId)) {
             address = formData.deliveryAddress;
         } else if (formData.deliveryTypeId === PICK_UP_POINT_TYPE_ID) {
             address = formData.pickUpPointAddress;
@@ -187,7 +187,7 @@ export default function OrderForm({ cart }) {
                             shouldShow={formData.deliveryTypeId === PICK_UP_POINT_TYPE_ID}
                             onChoose={handleCdekChoose}
                         />
-                        {formData.deliveryTypeId === DELIVERY_TYPE_ID &&
+                        {DELIVERY_TYPE_IDS.includes(formData.deliveryTypeId) &&
                             <TextField
                                 label="Address"
                                 variant="standard"
