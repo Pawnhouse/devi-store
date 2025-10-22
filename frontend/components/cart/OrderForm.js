@@ -99,13 +99,13 @@ export default function OrderForm({ cart }) {
             items: cart.map(item => {
                 if (item.isCertificate) {
                     return {
-                        name: item.name,
+                        code: item.code,
                         quantity: item.quantity,
                         price: item.price
                     }
                 } else {
                     return {
-                        name: item.name,
+                        code: item.code,
                         quantity: item.quantity,
                         size: item.size.abbrev
                     };
