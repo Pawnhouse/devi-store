@@ -13,6 +13,8 @@ export default function MyApp({ Component, pageProps }) {
     const [isPlus, setIsPlus] = useState(true);
     const [gridColumnNumberOptions, setGridColumnNumberOptions] = useState([]);
     const [gridColumnNumberOptionIndex, setGridColumnNumberOptionIndex] = useState(0);
+    const [cartCount, setCartCount] = useState(null);
+
     const router = useRouter();
     const isCatalog = router.asPath === '/';
     let gridButtonAnimate;
@@ -24,6 +26,22 @@ export default function MyApp({ Component, pageProps }) {
         gridButtonAnimate = 'back';
     }
 
+    const updateCartCount = () => {
+        console.log("update cart count");
+        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        console.log(123, localStorage.getItem('cart'));
+        if (cart.length > 0) {
+            const itemsCount = cart.map((item) => item.quantity).reduce((a, b) => a + b);
+            if (itemsCount > 9) {
+                setCartCount('');
+            } else {
+                setCartCount(itemsCount);
+            }
+        } else {
+            setCartCount(null);
+        }
+    };
+
     useEffect(() => {
         if (window.innerWidth <= 459) {
             setGridColumnNumberOptions([4, 3, 2, 1]);
@@ -32,6 +50,7 @@ export default function MyApp({ Component, pageProps }) {
         } else {
             setGridColumnNumberOptions([8, 6, 4]);
         }
+        updateCartCount();
     }, []);
 
     useEffect(() => {
@@ -69,6 +88,7 @@ export default function MyApp({ Component, pageProps }) {
                     <Header
                         gridButtonAnimate={gridButtonAnimate}
                         handleGridButtonClick={handleGridButtonClick}
+                        cartCount={cartCount}
                     />
                     <AnimatePresence initial={false} mode="popLayout">
                         {isCartPage ? (
@@ -83,7 +103,10 @@ export default function MyApp({ Component, pageProps }) {
                                     exit={{ translateX: "100%" }}
                                     transition={{ type: "tween", ease: "easeInOut", duration: 0.5 }}
                                 >
-                                    <Component {...pageProps} />
+                                    <Component
+                                        {...pageProps}
+                                        updateCartCount={updateCartCount}
+                                    />
                                 </motion.div>
                             </motion.div>
                         ) : (
@@ -97,6 +120,7 @@ export default function MyApp({ Component, pageProps }) {
                                 <Component
                                     {...pageProps}
                                     gridColumnNumber={gridColumnNumberOptions[gridColumnNumberOptionIndex]}
+                                    updateCartCount={updateCartCount}
                                 />
                             </motion.div>
                         )}

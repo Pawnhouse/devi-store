@@ -178,6 +178,22 @@ legend {
     width: auto;
 }
 
+.cart-badge {
+    position: absolute;
+    bottom: -5px;
+    right: -5px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    font-size: 10px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 17px;
+    height: 17px;
+}
+
 @media (max-width: 768px) {
     .product-grid {
         grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
@@ -216,6 +232,14 @@ legend {
     .icon-container {
         width: 24px;
         height: 24px;
+    }
+
+    .cart-badge {
+        font-size: 10px;
+        width: 14px;
+        height: 14px;
+        bottom: -3px;
+        right: -3px;
     }
 
     .logo {

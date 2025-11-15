@@ -3,7 +3,8 @@ import Image from 'next/image';
 import Logo from '../public/images/logo.svg';
 import GridButton from "./GridButton";
 
-export default function Header({ gridButtonAnimate, handleGridButtonClick }) {
+export default function Header({ gridButtonAnimate, handleGridButtonClick, cartCount }) {
+    console.log(cartCount);
     return (
         <header style={{ padding: '1rem 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <GridButton
@@ -26,6 +27,11 @@ export default function Header({ gridButtonAnimate, handleGridButtonClick }) {
                             src="/icons/bag-svgrepo-com.svg"
                             fill
                         />
+                        {cartCount !== null &&
+                            <div className="cart-badge">
+                                {cartCount}
+                            </div>
+                        }
                     </div>
                 </Link>
             </nav>

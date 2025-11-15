@@ -26,7 +26,13 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
         },
 }));
 
-export default function ProductPage({ product, goToNextProductPage, goToPrevProductPage, onImageLoad }) {
+export default function ProductPage({
+    product,
+    goToNextProductPage,
+    goToPrevProductPage,
+    onImageLoad,
+    updateCartCount
+}) {
     const [sizeId, setSizeId] = useState(null);
     const [certificate, setCertificate] = useState(null);
     const containerRef = useRef(null);
@@ -145,5 +151,6 @@ export default function ProductPage({ product, goToNextProductPage, goToPrevProd
         }
         localStorage.setItem('cart', JSON.stringify(cart));
         toast.success('Added to cart!');
+        updateCartCount();
     }
 }

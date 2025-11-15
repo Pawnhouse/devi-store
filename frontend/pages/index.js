@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { AnimatePresence, motion } from "framer-motion";
 import useProductNavigation from "../hooks/useProductNavigation";
 
-export default function Home({ gridColumnNumber }) {
+export default function Home({ gridColumnNumber, updateCartCount }) {
     const [clickedProductId, setClickedProductId] = useState(null);
     const [isAnimationComplete, setIsAnimationComplete] = useState(true);
     const [isImageLoaded, setIsImageLoaded] = useState(true);
@@ -127,6 +127,7 @@ export default function Home({ gridColumnNumber }) {
                             goToNextProductPage={goToNextProductPage}
                             goToPrevProductPage={goToPrevProductPage}
                             onImageLoad={() => setIsImageLoaded(true)}
+                            updateCartCount={updateCartCount}
                         />
                     </motion.div>
                 </AnimatePresence>

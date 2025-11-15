@@ -3,7 +3,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import CartItem from "../components/cart/CartItem";
 import OrderForm from "../components/cart/OrderForm";
 
-export default function Cart() {
+export default function Cart({ updateCartCount }) {
     const [cart, setCart] = useState([]);
 
     function getCartWithDetails(storedCart, products) {
@@ -27,6 +27,7 @@ export default function Cart() {
             quantity: item.quantity,
             sizeId: item.size?.id || null
         }))));
+        updateCartCount();
     }
 
     useEffect(() => {
