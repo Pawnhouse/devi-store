@@ -12,7 +12,7 @@ import { ToastContainer } from "react-toastify";
 export default function MyApp({ Component, pageProps }) {
     const [isPlus, setIsPlus] = useState(true);
     const [gridColumnNumberOptions, setGridColumnNumberOptions] = useState([]);
-    const [gridColumnNumberOptionIndex, setGridColumnNumberOptionIndex] = useState(0);
+    const [gridColumnNumberOptionIndex, setGridColumnNumberOptionIndex] = useState(2);
     const [cartCount, setCartCount] = useState(null);
 
     const router = useRouter();
@@ -46,9 +46,9 @@ export default function MyApp({ Component, pageProps }) {
         if (window.innerWidth <= 459) {
             setGridColumnNumberOptions([4, 3, 2, 1]);
         } else if (window.innerWidth <= 1024) {
-            setGridColumnNumberOptions([6, 4, 3]);
+            setGridColumnNumberOptions([6, 5, 4, 3]);
         } else {
-            setGridColumnNumberOptions([8, 6, 4]);
+            setGridColumnNumberOptions([8, 6, 5, 4]);
         }
         updateCartCount();
     }, []);
