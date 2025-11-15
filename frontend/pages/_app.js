@@ -27,9 +27,7 @@ export default function MyApp({ Component, pageProps }) {
     }
 
     const updateCartCount = () => {
-        console.log("update cart count");
         const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-        console.log(123, localStorage.getItem('cart'));
         if (cart.length > 0) {
             const itemsCount = cart.map((item) => item.quantity).reduce((a, b) => a + b);
             if (itemsCount > 9) {
