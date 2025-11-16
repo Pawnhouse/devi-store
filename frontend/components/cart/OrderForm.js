@@ -22,7 +22,7 @@ const CdekWidget = dynamic(() => import('./CdekWidget'), { ssr: false });
 const PICK_UP_POINT_TYPE_ID = 1;
 const DELIVERY_TYPE_IDS = [2, 4];
 
-export default function OrderForm({ cart }) {
+export default function OrderForm({ cart, updateCartCount }) {
     const [deliveryTypes, setDeliveryTypes] = useState([]);
     const [formData, setFormData] = useState({
         name: '',
@@ -38,6 +38,7 @@ export default function OrderForm({ cart }) {
     const router = useRouter();
     const handleClose = () => {
         setIsDialogOpen(false);
+        updateCartCount();
         router.push('/');
     };
 

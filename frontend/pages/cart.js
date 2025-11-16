@@ -72,7 +72,10 @@ export default function Cart({ updateCartCount }) {
                         />
                     ))}
                     <p style={{ textAlign: 'right' }}>Subtotal: {new Intl.NumberFormat('ru-RU').format(total)} RUB</p>
-                    <OrderForm cart={cart}/>
+                    <OrderForm
+                        cart={cart}
+                        updateCartCount={updateCartCount}
+                    />
                 </>
             )}
         </div>
