@@ -45,11 +45,11 @@ export default function ProductCard(
         }
 
         const rect = imageRef.current.getBoundingClientRect();
-        const viewportCenterX = window.innerWidth / 2;
+        const viewportCenterX = document.documentElement.clientWidth / 2;
         const currentCenterX = rect.left + rect.width / 2;
         const currentTop = rect.top;
         const carouselHeight = 400;
-        const containerWidth = window.innerWidth - (window.innerWidth <= 459 ? 68 : 84);
+        const containerWidth = document.documentElement.clientWidth - (window.innerWidth <= 459 ? 68 : 84);
         const imageHeight = Math.min(
             carouselHeight,
             containerWidth / imageRef.current.naturalWidth * imageRef.current.naturalHeight
