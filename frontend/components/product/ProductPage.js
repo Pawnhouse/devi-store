@@ -128,7 +128,8 @@ export default function ProductPage({
                     <p style={{ margin: "0" }}>{product.description}</p>
                     <button
                         onClick={() => addToCart(certificate || product, sizeId)}
-                        className="icon-container add-to-cart"
+                        className="icon-container"
+                        style={{ marginBottom: "var(--container-padding)" }}
                     >
                         <Image
                             alt="Add to Cart"

@@ -73,6 +73,7 @@ export default function MyApp({ Component, pageProps }) {
     }
 
     const isCartPage = router.pathname === "/cart";
+    const duration = 0.5;
     return (
         <>
             <Head>
@@ -99,7 +100,7 @@ export default function MyApp({ Component, pageProps }) {
                                     initial={{ left: "100%" }}
                                     animate={{ left: 0 }}
                                     exit={{ translateX: "100%" }}
-                                    transition={{ type: "tween", ease: "easeInOut", duration: 0.5 }}
+                                    transition={{ type: "tween", ease: "easeInOut", duration: duration }}
                                 >
                                     <Component
                                         {...pageProps}
@@ -110,7 +111,7 @@ export default function MyApp({ Component, pageProps }) {
                         ) : (
                             <motion.div
                                 key={router.pathname}
-                                transition={{ duration: 0.5 }}
+                                transition={{ duration: duration }}
                                 initial={{ opacity: 0.9 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0.9 }}
