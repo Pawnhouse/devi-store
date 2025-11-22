@@ -4,7 +4,7 @@ import CartItem from "../components/cart/CartItem";
 import OrderForm from "../components/cart/OrderForm";
 
 export default function Cart({ updateCartCount }) {
-    const [cart, setCart] = useState([]);
+    const [cart, setCart] = useState(null);
 
     function getCartWithDetails(storedCart, products) {
         return storedCart
@@ -54,14 +54,15 @@ export default function Cart({ updateCartCount }) {
         updateCart(updatedCart);
     };
 
-    const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const total = cart?.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
     return (
         <div style={{ maxWidth: '500px' }}>
             <h2>Ваш заказ</h2>
-            {cart.length === 0 ? (
+            {cart?.length === 0 &&
                 <p>Корзина пуста.</p>
-            ) : (
+            }
+            {cart?.length > 0 && (
                 <>
                     {cart.map((item) => (
                         <CartItem
