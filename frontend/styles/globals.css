@@ -97,15 +97,19 @@ h1, h2, h3 {
     gap: 10px;
 }
 
-.submit-button {
+.submit-button, .add-to-cart-button {
     padding: 10px;
     margin-bottom: var(--container-padding);
     background-color: #000000;
     color: white;
 }
 
-.submit-button:hover {
+.submit-button:hover, .add-to-cart-button:hover {
     background-color: #333333;
+}
+
+.add-to-cart-button {
+    background-color: #666666;
 }
 
 .icon-container {

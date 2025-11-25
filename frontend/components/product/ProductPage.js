@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import Image from 'next/image';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -127,15 +126,10 @@ export default function ProductPage({
                     <p style={{ margin: "0" }}>{new Intl.NumberFormat('ru-RU').format((certificate || product).price)} RUB</p>
                     <p style={{ margin: "0" }}>{product.description}</p>
                     <button
+                        className="add-to-cart-button"
                         onClick={() => addToCart(certificate || product, sizeId)}
-                        className="icon-container"
-                        style={{ marginBottom: "var(--container-padding)" }}
                     >
-                        <Image
-                            alt="Add to Cart"
-                            src="/icons/plus-large-svgrepo-com.svg"
-                            fill
-                        />
+                        Добавить в корзину
                     </button>
                 </>
             }
