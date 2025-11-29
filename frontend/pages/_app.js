@@ -81,6 +81,11 @@ export default function MyApp({ Component, pageProps }) {
                     href="https://fonts.googleapis.com/css2?family=Geologica:wght@100;300&display=swap"
                     rel="stylesheet"
                 />
+                <title>Devi Store</title>
+                <meta
+                    name="description"
+                    content="Explore women's clothing catalog at Devi Store."
+                />
             </Head>
             <ThemeProvider theme={theme}>
                 <div className="container">
