@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 
 export default function GridButton({ gridButtonAnimate, handleGridButtonClick }) {
+    const [isMounted, setIsMounted] = useState(false);
     const firstBarVariants = {
         plus: {
             d: 'M4 12 L20 12'
@@ -26,32 +28,36 @@ export default function GridButton({ gridButtonAnimate, handleGridButtonClick })
             opacity: 1
         }
     }
+    useEffect(()=>{
+        setIsMounted(true);
+    }, [])
     return (
         <button
             className="icon-container"
             onClick={handleGridButtonClick}
         >
-            <svg viewBox="0 0 24 24" fill="none">
-                <motion.path
-                    stroke="#000000"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    initial={false}
-                    animate={gridButtonAnimate}
-                    variants={firstBarVariants}
-                />
-                <motion.path
-                    stroke="#000000"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    initial={false}
-                    animate={gridButtonAnimate}
-                    variants={secondBarVariants}
-                />
-            </svg>
+            {isMounted &&
+                <svg viewBox="0 0 24 24" fill="none">
+                    <motion.path
+                        stroke="#000000"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        initial={false}
+                        animate={gridButtonAnimate}
+                        variants={firstBarVariants}
+                    />
+                    <motion.path
+                        stroke="#000000"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        initial={false}
+                        animate={gridButtonAnimate}
+                        variants={secondBarVariants}
+                    />
+                </svg>
+            }
         </button>
-
     )
 }
